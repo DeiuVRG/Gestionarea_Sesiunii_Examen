@@ -1,6 +1,9 @@
-namespace Laborator4_AI
+namespace Laborator4_AI.Domain.Models.Commands
 {
-    // Command
+    /// <summary>
+    /// Command for scheduling an exam
+    /// Contains raw string input that will be validated by the workflow
+    /// </summary>
     public sealed class ScheduleExamCommand
     {
         public string CourseCode { get; init; } = string.Empty;
@@ -11,4 +14,3 @@ namespace Laborator4_AI
         public string ExpectedStudents { get; init; } = string.Empty;
     }
 }
-

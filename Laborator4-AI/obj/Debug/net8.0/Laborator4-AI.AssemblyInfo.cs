@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Laborator4-AI")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+8c976ca89398b52958d6f9e98b7f1461cdaf681e")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+1a2af2201099ebda8fb28a707bf9eb4422eea1c3")]
 [assembly: System.Reflection.AssemblyProductAttribute("Laborator4-AI")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Laborator4-AI")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
