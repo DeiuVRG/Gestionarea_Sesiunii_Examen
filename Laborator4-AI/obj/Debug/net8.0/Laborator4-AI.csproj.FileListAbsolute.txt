@@ -108,3 +108,6 @@
 /Users/deiuvrg/Library/CloudStorage/OneDrive-UniversitateaPolitehnicaTimisoara/An4IS/PSSC/Gestionarea_Sesiunii_examen/Laborator4-AI/obj/Debug/net8.0/Laborator4-AI.pdb
 /Users/deiuvrg/Library/CloudStorage/OneDrive-UniversitateaPolitehnicaTimisoara/An4IS/PSSC/Gestionarea_Sesiunii_examen/Laborator4-AI/obj/Debug/net8.0/Laborator4-AI.genruntimeconfig.cache
 /Users/deiuvrg/Library/CloudStorage/OneDrive-UniversitateaPolitehnicaTimisoara/An4IS/PSSC/Gestionarea_Sesiunii_examen/Laborator4-AI/obj/Debug/net8.0/ref/Laborator4-AI.dll
+/Users/deiuvrg/Library/CloudStorage/OneDrive-UniversitateaPolitehnicaTimisoara/An4IS/PSSC/Gestionarea_Sesiunii_examen/Laborator4-AI/bin/Debug/net8.0/Npgsql.dll
+/Users/deiuvrg/Library/CloudStorage/OneDrive-UniversitateaPolitehnicaTimisoara/An4IS/PSSC/Gestionarea_Sesiunii_examen/Laborator4-AI/bin/Debug/net8.0/Npgsql.EntityFrameworkCore.PostgreSQL.dll
+/Users/deiuvrg/Library/CloudStorage/OneDrive-UniversitateaPolitehnicaTimisoara/An4IS/PSSC/Gestionarea_Sesiunii_examen/Laborator4-AI/bin/Debug/net8.0/System.Diagnostics.DiagnosticSource.dll

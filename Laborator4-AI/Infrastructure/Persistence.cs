@@ -19,20 +19,49 @@ namespace Laborator4_AI.Infrastructure
         public DbSet<ExamGradeEntity> ExamGrades { get; set; } = null!;
         public DbSet<ContestationEntity> Contestations { get; set; } = null!;
 
-        private readonly string _dbPath;
+        private readonly string _connectionString;
 
-        public SchedulingDbContext(string dbPath)
+        public SchedulingDbContext(string connectionString)
         {
-            _dbPath = dbPath;
+            _connectionString = connectionString;
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlite($"Data Source={_dbPath}");
+            optionsBuilder.UseNpgsql(_connectionString);
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            // Configure DateTime as timestamp without time zone (pentru compatibilitate cross-platform)
+            modelBuilder.Entity<RoomReservation>()
+                .Property(r => r.Date)
+                .HasColumnType("timestamp without time zone");
+            
+            modelBuilder.Entity<StudentRegistrationEntity>()
+                .Property(s => s.ExamDate)
+                .HasColumnType("timestamp without time zone");
+            
+            modelBuilder.Entity<StudentRegistrationEntity>()
+                .Property(s => s.RegisteredAt)
+                .HasColumnType("timestamp without time zone");
+            
+            modelBuilder.Entity<ExamGradeEntity>()
+                .Property(g => g.ExamDate)
+                .HasColumnType("timestamp without time zone");
+            
+            modelBuilder.Entity<ExamGradeEntity>()
+                .Property(g => g.PublishedAt)
+                .HasColumnType("timestamp without time zone");
+            
+            modelBuilder.Entity<ContestationEntity>()
+                .Property(c => c.ExamDate)
+                .HasColumnType("timestamp without time zone");
+            
+            modelBuilder.Entity<ContestationEntity>()
+                .Property(c => c.FiledAt)
+                .HasColumnType("timestamp without time zone");
+
             modelBuilder.Entity<RoomEntity>().HasKey(r => r.Number);
             
             modelBuilder.Entity<RoomReservation>().HasKey(r => r.Id);

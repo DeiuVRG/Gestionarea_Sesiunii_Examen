@@ -19,13 +19,18 @@ namespace Laborator4_AI
             Console.WriteLine("╚══════════════════════════════════════════════════════════════════╝");
             Console.WriteLine();
 
-            var dbPath = Path.Combine(Path.GetTempPath(), "exam_scheduling_demo.db");
-            if (File.Exists(dbPath)) File.Delete(dbPath);
+            // PostgreSQL connection string
+            // Mac: localhost cu userul curent, Windows: localhost sau IP-ul serverului cu user postgres
+            var connectionString = "Host=localhost;Database=exam_scheduling;Username=deiuvrg";
             
-            var db = new SchedulingDbContext(dbPath);
+            var db = new SchedulingDbContext(connectionString);
+            
+            // Recreate database for demo (clean start)
+            db.Database.EnsureDeleted();
+            db.Database.EnsureCreated();
             db.EnsureSeeded();
 
-            Console.WriteLine($"📂 Database: {dbPath}");
+            Console.WriteLine($"📂 Database: PostgreSQL @ localhost/exam_scheduling");
             Console.WriteLine($"🏫 Available rooms: {db.Rooms.Count()}");
             Console.WriteLine();
 
