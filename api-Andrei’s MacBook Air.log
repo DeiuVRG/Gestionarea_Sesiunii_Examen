@@ -1,0 +1,1228 @@
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (16ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT CASE WHEN COUNT(*) = 0 THEN FALSE ELSE TRUE END
+      FROM pg_class AS cls
+      JOIN pg_namespace AS ns ON ns.oid = cls.relnamespace
+      WHERE
+              cls.relkind IN ('r', 'v', 'm', 'f', 'p') AND
+              ns.nspname NOT IN ('pg_catalog', 'information_schema') AND
+              -- Exclude tables which are members of PG extensions
+              NOT EXISTS (
+                  SELECT 1 FROM pg_depend WHERE
+                      classid=(
+                          SELECT cls.oid
+                          FROM pg_class AS cls
+                                   JOIN pg_namespace AS ns ON ns.oid = cls.relnamespace
+                          WHERE relname='pg_class' AND ns.nspname='pg_catalog'
+                      ) AND
+                      objid=cls.oid AND
+                      deptype IN ('e', 'x')
+              )
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT EXISTS (
+          SELECT 1
+          FROM "Rooms" AS r)
+📂 Connected to PostgreSQL @ localhost/exam_scheduling
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT count(*)::int
+      FROM "Rooms" AS r
+🏫 Rooms available: 6
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT count(*)::int
+      FROM "Reservations" AS r
+📋 Exams scheduled: 1
+
+╔══════════════════════════════════════════════════════════════════╗
+║        EXAM SCHEDULING API - Web API cu Swagger UI              ║
+╚══════════════════════════════════════════════════════════════════╝
+
+🌐 Swagger UI:  http://localhost:5000
+📡 API Base:    http://localhost:5000/api
+
+info: Microsoft.Hosting.Lifetime[14]
+      Now listening on: http://localhost:5001
+info: Microsoft.Hosting.Lifetime[0]
+      Application started. Press Ctrl+C to shut down.
+info: Microsoft.Hosting.Lifetime[0]
+      Hosting environment: Production
+info: Microsoft.Hosting.Lifetime[0]
+      Content root path: /Users/deiuvrg/Library/CloudStorage/OneDrive-UniversitateaPolitehnicaTimisoara/An4IS/PSSC/Gestionarea_Sesiunii_examen/Laborator4-AI
+info: Microsoft.AspNetCore.Hosting.Diagnostics[1]
+      Request starting HTTP/1.1 GET http://localhost:5001/api/exams/rooms - - -
+warn: Microsoft.AspNetCore.HttpsPolicy.HttpsRedirectionMiddleware[3]
+      Failed to determine the https port for redirect.
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[0]
+      Executing endpoint 'Laborator4_AI.Api.Controllers.ExamsController.GetRooms (Laborator4-AI)'
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker[102]
+      Route matched with {action = "GetRooms", controller = "Exams"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[Laborator4_AI.Api.Models.ApiResponse`1[System.Collections.Generic.List`1[System.Object]]]] GetRooms() on controller Laborator4_AI.Api.Controllers.ExamsController (Laborator4-AI).
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (3ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT r."Number", r."Capacity"
+      FROM "Rooms" AS r
+      ORDER BY r."Number"
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ObjectResultExecutor[1]
+      Executing OkObjectResult, writing value of type 'Laborator4_AI.Api.Models.ApiResponse`1[[System.Collections.Generic.List`1[[System.Object, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]], System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker[105]
+      Executed action Laborator4_AI.Api.Controllers.ExamsController.GetRooms (Laborator4-AI) in 34.9165ms
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[1]
+      Executed endpoint 'Laborator4_AI.Api.Controllers.ExamsController.GetRooms (Laborator4-AI)'
+info: Microsoft.AspNetCore.Hosting.Diagnostics[2]
+      Request finished HTTP/1.1 GET http://localhost:5001/api/exams/rooms - 200 - application/json;+charset=utf-8 59.0229ms
+info: Microsoft.AspNetCore.Hosting.Diagnostics[1]
+      Request starting HTTP/1.1 POST http://localhost:5001/api/students/register - application/json 83
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[0]
+      Executing endpoint 'Laborator4_AI.Api.Controllers.StudentsController.RegisterStudent (Laborator4-AI)'
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker[102]
+      Route matched with {action = "RegisterStudent", controller = "Students"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[Laborator4_AI.Api.Models.ApiResponse`1[Laborator4_AI.Api.Models.StudentRegistrationDto]]] RegisterStudent(Laborator4_AI.Api.Models.RegisterStudentRequest) on controller Laborator4_AI.Api.Controllers.StudentsController (Laborator4-AI).
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (3ms) [Parameters=[@__8__locals1_request_CourseCode_0='?', @__examDate_Date_1='?' (DbType = DateTime)], CommandType='Text', CommandTimeout='30']
+      SELECT r."Id", r."CourseCode", r."Date", r."DurationMinutes", r."RoomNumber"
+      FROM "Reservations" AS r
+      WHERE r."CourseCode" = @__8__locals1_request_CourseCode_0 AND date_trunc('day', r."Date") = @__examDate_Date_1
+      LIMIT 1
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (1ms) [Parameters=[@__8__locals1_request_StudentRegistrationNumber_0='?', @__8__locals1_request_CourseCode_1='?', @__examDate_Date_2='?' (DbType = DateTime)], CommandType='Text', CommandTimeout='30']
+      SELECT s."Id", s."CourseCode", s."ExamDate", s."RegisteredAt", s."RoomNumber", s."StudentRegNumber"
+      FROM "StudentRegistrations" AS s
+      WHERE s."StudentRegNumber" = @__8__locals1_request_StudentRegistrationNumber_0 AND s."CourseCode" = @__8__locals1_request_CourseCode_1 AND date_trunc('day', s."ExamDate") = @__examDate_Date_2
+      LIMIT 1
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (5ms) [Parameters=[@p0='?', @p1='?' (DbType = DateTime), @p2='?' (DbType = DateTime), @p3='?', @p4='?'], CommandType='Text', CommandTimeout='30']
+      INSERT INTO "StudentRegistrations" ("CourseCode", "ExamDate", "RegisteredAt", "RoomNumber", "StudentRegNumber")
+      VALUES (@p0, @p1, @p2, @p3, @p4)
+      RETURNING "Id";
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ObjectResultExecutor[1]
+      Executing CreatedAtActionResult, writing value of type 'Laborator4_AI.Api.Models.ApiResponse`1[[Laborator4_AI.Api.Models.StudentRegistrationDto, Laborator4-AI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker[105]
+      Executed action Laborator4_AI.Api.Controllers.StudentsController.RegisterStudent (Laborator4-AI) in 112.0971ms
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[1]
+      Executed endpoint 'Laborator4_AI.Api.Controllers.StudentsController.RegisterStudent (Laborator4-AI)'
+info: Microsoft.AspNetCore.Hosting.Diagnostics[2]
+      Request finished HTTP/1.1 POST http://localhost:5001/api/students/register - 201 - application/json;+charset=utf-8 117.7833ms
+info: Microsoft.AspNetCore.Hosting.Diagnostics[1]
+      Request starting HTTP/1.1 POST http://localhost:5001/api/grades - application/json 109
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[0]
+      Executing endpoint 'Laborator4_AI.Api.Controllers.GradesController.PublishGrades (Laborator4-AI)'
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker[102]
+      Route matched with {action = "PublishGrades", controller = "Grades"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[Laborator4_AI.Api.Models.ApiResponse`1[System.Object]]] PublishGrades(Laborator4_AI.Api.Models.PublishGradesRequest) on controller Laborator4_AI.Api.Controllers.GradesController (Laborator4-AI).
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@__8__locals1_request_CourseCode_0='?', @__examDate_Date_1='?' (DbType = DateTime)], CommandType='Text', CommandTimeout='30']
+      SELECT EXISTS (
+          SELECT 1
+          FROM "Reservations" AS r
+          WHERE r."CourseCode" = @__8__locals1_request_CourseCode_0 AND date_trunc('day', r."Date") = @__examDate_Date_1)
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@__gradeInput_StudentRegistrationNumber_0='?', @__8__locals1_request_CourseCode_1='?', @__8__locals2_examDate_Date_2='?' (DbType = DateTime)], CommandType='Text', CommandTimeout='30']
+      SELECT EXISTS (
+          SELECT 1
+          FROM "StudentRegistrations" AS s
+          WHERE s."StudentRegNumber" = @__gradeInput_StudentRegistrationNumber_0 AND s."CourseCode" = @__8__locals1_request_CourseCode_1 AND date_trunc('day', s."ExamDate") = @__8__locals2_examDate_Date_2)
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (1ms) [Parameters=[@__gradeInput_StudentRegistrationNumber_0='?', @__8__locals1_request_CourseCode_1='?', @__8__locals2_examDate_Date_2='?' (DbType = DateTime)], CommandType='Text', CommandTimeout='30']
+      SELECT e."Id", e."CourseCode", e."ExamDate", e."Grade", e."PublishedAt", e."StudentRegNumber"
+      FROM "ExamGrades" AS e
+      WHERE e."StudentRegNumber" = @__gradeInput_StudentRegistrationNumber_0 AND e."CourseCode" = @__8__locals1_request_CourseCode_1 AND date_trunc('day', e."ExamDate") = @__8__locals2_examDate_Date_2
+      LIMIT 1
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (3ms) [Parameters=[@p0='?', @p1='?' (DbType = DateTime), @p2='?' (DbType = Decimal), @p3='?' (DbType = DateTime), @p4='?'], CommandType='Text', CommandTimeout='30']
+      INSERT INTO "ExamGrades" ("CourseCode", "ExamDate", "Grade", "PublishedAt", "StudentRegNumber")
+      VALUES (@p0, @p1, @p2, @p3, @p4)
+      RETURNING "Id";
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ObjectResultExecutor[1]
+      Executing CreatedAtActionResult, writing value of type 'Laborator4_AI.Api.Models.ApiResponse`1[[System.Object, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker[105]
+      Executed action Laborator4_AI.Api.Controllers.GradesController.PublishGrades (Laborator4-AI) in 26.3135ms
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[1]
+      Executed endpoint 'Laborator4_AI.Api.Controllers.GradesController.PublishGrades (Laborator4-AI)'
+info: Microsoft.AspNetCore.Hosting.Diagnostics[2]
+      Request finished HTTP/1.1 POST http://localhost:5001/api/grades - 201 - application/json;+charset=utf-8 28.3245ms
+info: Microsoft.AspNetCore.Hosting.Diagnostics[1]
+      Request starting HTTP/1.1 GET http://localhost:5001/index.html - - -
+info: Microsoft.AspNetCore.Hosting.Diagnostics[2]
+      Request finished HTTP/1.1 GET http://localhost:5001/index.html - 200 - text/html;charset=utf-8 35.9107ms
+info: Microsoft.AspNetCore.Hosting.Diagnostics[1]
+      Request starting HTTP/1.1 GET http://localhost:5001/index.js - - -
+info: Microsoft.AspNetCore.Hosting.Diagnostics[2]
+      Request finished HTTP/1.1 GET http://localhost:5001/index.js - 200 - application/javascript;charset=utf-8 0.8100ms
+info: Microsoft.AspNetCore.Hosting.Diagnostics[1]
+      Request starting HTTP/1.1 GET http://localhost:5001/swagger/v1/swagger.json - - -
+info: Microsoft.AspNetCore.Hosting.Diagnostics[2]
+      Request finished HTTP/1.1 GET http://localhost:5001/swagger/v1/swagger.json - 200 - application/json;charset=utf-8 53.4768ms
+info: Microsoft.AspNetCore.Hosting.Diagnostics[1]
+      Request starting HTTP/1.1 GET http://localhost:5001/api/Exams/1 - - -
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[0]
+      Executing endpoint 'Laborator4_AI.Api.Controllers.ExamsController.GetExam (Laborator4-AI)'
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker[102]
+      Route matched with {action = "GetExam", controller = "Exams"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[Laborator4_AI.Api.Models.ApiResponse`1[Laborator4_AI.Api.Models.ExamDto]]] GetExam(Int32) on controller Laborator4_AI.Api.Controllers.ExamsController (Laborator4-AI).
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (1ms) [Parameters=[@__p_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+      SELECT r."Id", r."CourseCode", r."Date", r."DurationMinutes", r."RoomNumber"
+      FROM "Reservations" AS r
+      WHERE r."Id" = @__p_0
+      LIMIT 1
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@__reservation_RoomNumber_0='?'], CommandType='Text', CommandTimeout='30']
+      SELECT r."Number", r."Capacity"
+      FROM "Rooms" AS r
+      WHERE r."Number" = @__reservation_RoomNumber_0
+      LIMIT 1
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (1ms) [Parameters=[@__reservation_CourseCode_0='?', @__reservation_Date_1='?' (DbType = DateTime)], CommandType='Text', CommandTimeout='30']
+      SELECT count(*)::int
+      FROM "StudentRegistrations" AS s
+      WHERE s."CourseCode" = @__reservation_CourseCode_0 AND s."ExamDate" = @__reservation_Date_1
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ObjectResultExecutor[1]
+      Executing OkObjectResult, writing value of type 'Laborator4_AI.Api.Models.ApiResponse`1[[Laborator4_AI.Api.Models.ExamDto, Laborator4-AI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker[105]
+      Executed action Laborator4_AI.Api.Controllers.ExamsController.GetExam (Laborator4-AI) in 37.3204ms
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[1]
+      Executed endpoint 'Laborator4_AI.Api.Controllers.ExamsController.GetExam (Laborator4-AI)'
+info: Microsoft.AspNetCore.Hosting.Diagnostics[2]
+      Request finished HTTP/1.1 GET http://localhost:5001/api/Exams/1 - 200 - application/json;+charset=utf-8 41.0226ms
+info: Microsoft.AspNetCore.Hosting.Diagnostics[1]
+      Request starting HTTP/1.1 GET http://localhost:5001/api/Exams/rooms - - -
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[0]
+      Executing endpoint 'Laborator4_AI.Api.Controllers.ExamsController.GetRooms (Laborator4-AI)'
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker[102]
+      Route matched with {action = "GetRooms", controller = "Exams"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[Laborator4_AI.Api.Models.ApiResponse`1[System.Collections.Generic.List`1[System.Object]]]] GetRooms() on controller Laborator4_AI.Api.Controllers.ExamsController (Laborator4-AI).
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT r."Number", r."Capacity"
+      FROM "Rooms" AS r
+      ORDER BY r."Number"
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ObjectResultExecutor[1]
+      Executing OkObjectResult, writing value of type 'Laborator4_AI.Api.Models.ApiResponse`1[[System.Collections.Generic.List`1[[System.Object, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]], System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker[105]
+      Executed action Laborator4_AI.Api.Controllers.ExamsController.GetRooms (Laborator4-AI) in 4.7467ms
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[1]
+      Executed endpoint 'Laborator4_AI.Api.Controllers.ExamsController.GetRooms (Laborator4-AI)'
+info: Microsoft.AspNetCore.Hosting.Diagnostics[2]
+      Request finished HTTP/1.1 GET http://localhost:5001/api/Exams/rooms - 200 - application/json;+charset=utf-8 5.0693ms
+info: Microsoft.AspNetCore.Hosting.Diagnostics[1]
+      Request starting HTTP/1.1 GET http://localhost:5001/api/Students/registrations - - -
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[0]
+      Executing endpoint 'Laborator4_AI.Api.Controllers.StudentsController.GetAllRegistrations (Laborator4-AI)'
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker[102]
+      Route matched with {action = "GetAllRegistrations", controller = "Students"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[Laborator4_AI.Api.Models.ApiResponse`1[System.Collections.Generic.List`1[Laborator4_AI.Api.Models.StudentRegistrationDto]]]] GetAllRegistrations() on controller Laborator4_AI.Api.Controllers.StudentsController (Laborator4-AI).
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT s."Id", s."StudentRegNumber" AS "StudentRegistrationNumber", s."CourseCode", s."ExamDate", s."RoomNumber", s."RegisteredAt"
+      FROM "StudentRegistrations" AS s
+      ORDER BY s."RegisteredAt" DESC
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ObjectResultExecutor[1]
+      Executing OkObjectResult, writing value of type 'Laborator4_AI.Api.Models.ApiResponse`1[[System.Collections.Generic.List`1[[Laborator4_AI.Api.Models.StudentRegistrationDto, Laborator4-AI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker[105]
+      Executed action Laborator4_AI.Api.Controllers.StudentsController.GetAllRegistrations (Laborator4-AI) in 13.3717ms
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[1]
+      Executed endpoint 'Laborator4_AI.Api.Controllers.StudentsController.GetAllRegistrations (Laborator4-AI)'
+info: Microsoft.AspNetCore.Hosting.Diagnostics[2]
+      Request finished HTTP/1.1 GET http://localhost:5001/api/Students/registrations - 200 - application/json;+charset=utf-8 16.2821ms
+info: Microsoft.AspNetCore.Hosting.Diagnostics[1]
+      Request starting HTTP/1.1 GET http://localhost:5001/api/Students/LM12347/registrations - - -
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[0]
+      Executing endpoint 'Laborator4_AI.Api.Controllers.StudentsController.GetStudentRegistrations (Laborator4-AI)'
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker[102]
+      Route matched with {action = "GetStudentRegistrations", controller = "Students"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[Laborator4_AI.Api.Models.ApiResponse`1[System.Collections.Generic.List`1[Laborator4_AI.Api.Models.StudentRegistrationDto]]]] GetStudentRegistrations(System.String) on controller Laborator4_AI.Api.Controllers.StudentsController (Laborator4-AI).
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@__studentNumber_0='?'], CommandType='Text', CommandTimeout='30']
+      SELECT s."Id", s."StudentRegNumber" AS "StudentRegistrationNumber", s."CourseCode", s."ExamDate", s."RoomNumber", s."RegisteredAt"
+      FROM "StudentRegistrations" AS s
+      WHERE s."StudentRegNumber" = @__studentNumber_0
+      ORDER BY s."RegisteredAt" DESC
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ObjectResultExecutor[1]
+      Executing OkObjectResult, writing value of type 'Laborator4_AI.Api.Models.ApiResponse`1[[System.Collections.Generic.List`1[[Laborator4_AI.Api.Models.StudentRegistrationDto, Laborator4-AI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker[105]
+      Executed action Laborator4_AI.Api.Controllers.StudentsController.GetStudentRegistrations (Laborator4-AI) in 5.5485ms
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[1]
+      Executed endpoint 'Laborator4_AI.Api.Controllers.StudentsController.GetStudentRegistrations (Laborator4-AI)'
+info: Microsoft.AspNetCore.Hosting.Diagnostics[2]
+      Request finished HTTP/1.1 GET http://localhost:5001/api/Students/LM12347/registrations - 200 - application/json;+charset=utf-8 8.0113ms
+info: Microsoft.AspNetCore.Hosting.Diagnostics[1]
+      Request starting HTTP/1.1 POST http://localhost:5001/api/Students/register - application/json 107
+info: Microsoft.AspNetCore.Cors.Infrastructure.CorsService[4]
+      CORS policy execution successful.
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[0]
+      Executing endpoint 'Laborator4_AI.Api.Controllers.StudentsController.RegisterStudent (Laborator4-AI)'
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker[102]
+      Route matched with {action = "RegisterStudent", controller = "Students"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[Laborator4_AI.Api.Models.ApiResponse`1[Laborator4_AI.Api.Models.StudentRegistrationDto]]] RegisterStudent(Laborator4_AI.Api.Models.RegisterStudentRequest) on controller Laborator4_AI.Api.Controllers.StudentsController (Laborator4-AI).
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (1ms) [Parameters=[@__8__locals1_request_CourseCode_0='?', @__examDate_Date_1='?' (DbType = DateTime)], CommandType='Text', CommandTimeout='30']
+      SELECT r."Id", r."CourseCode", r."Date", r."DurationMinutes", r."RoomNumber"
+      FROM "Reservations" AS r
+      WHERE r."CourseCode" = @__8__locals1_request_CourseCode_0 AND date_trunc('day', r."Date") = @__examDate_Date_1
+      LIMIT 1
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ObjectResultExecutor[1]
+      Executing NotFoundObjectResult, writing value of type 'Laborator4_AI.Api.Models.ApiResponse`1[[Laborator4_AI.Api.Models.StudentRegistrationDto, Laborator4-AI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker[105]
+      Executed action Laborator4_AI.Api.Controllers.StudentsController.RegisterStudent (Laborator4-AI) in 26.5872ms
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[1]
+      Executed endpoint 'Laborator4_AI.Api.Controllers.StudentsController.RegisterStudent (Laborator4-AI)'
+info: Microsoft.AspNetCore.Hosting.Diagnostics[2]
+      Request finished HTTP/1.1 POST http://localhost:5001/api/Students/register - 404 - application/json;+charset=utf-8 29.5467ms
+info: Microsoft.AspNetCore.Hosting.Diagnostics[1]
+      Request starting HTTP/1.1 GET http://localhost:5001/api/grades - - -
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[0]
+      Executing endpoint 'Laborator4_AI.Api.Controllers.GradesController.GetAllGrades (Laborator4-AI)'
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker[102]
+      Route matched with {action = "GetAllGrades", controller = "Grades"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[Laborator4_AI.Api.Models.ApiResponse`1[System.Collections.Generic.List`1[Laborator4_AI.Api.Models.GradeDto]]]] GetAllGrades() on controller Laborator4_AI.Api.Controllers.GradesController (Laborator4-AI).
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (34ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT e."Id", e."StudentRegNumber" AS "StudentRegistrationNumber", e."CourseCode", e."ExamDate", e."Grade", e."Grade" >= 5.0 AS "IsPassing", COALESCE(e."PublishedAt", now() AT TIME ZONE 'UTC') AS "PublishedAt"
+      FROM "ExamGrades" AS e
+      ORDER BY COALESCE(e."PublishedAt", now() AT TIME ZONE 'UTC') DESC
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ObjectResultExecutor[1]
+      Executing OkObjectResult, writing value of type 'Laborator4_AI.Api.Models.ApiResponse`1[[System.Collections.Generic.List`1[[Laborator4_AI.Api.Models.GradeDto, Laborator4-AI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker[105]
+      Executed action Laborator4_AI.Api.Controllers.GradesController.GetAllGrades (Laborator4-AI) in 42.8585ms
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[1]
+      Executed endpoint 'Laborator4_AI.Api.Controllers.GradesController.GetAllGrades (Laborator4-AI)'
+info: Microsoft.AspNetCore.Hosting.Diagnostics[2]
+      Request finished HTTP/1.1 GET http://localhost:5001/api/grades - 200 - application/json;+charset=utf-8 47.2909ms
+info: Microsoft.AspNetCore.Hosting.Diagnostics[1]
+      Request starting HTTP/1.1 GET http://localhost:5001/?id=cf7b30f3-f4fb-48a7-8797-281d217c6a0c&vscodeBrowserReqId=1762412009756 - - -
+info: Microsoft.AspNetCore.Hosting.Diagnostics[2]
+      Request finished HTTP/1.1 GET http://localhost:5001/?id=cf7b30f3-f4fb-48a7-8797-281d217c6a0c&vscodeBrowserReqId=1762412009756 - 301 0 - 0.2122ms
+info: Microsoft.AspNetCore.Hosting.Diagnostics[1]
+      Request starting HTTP/1.1 GET http://localhost:5001/index.html - - -
+info: Microsoft.AspNetCore.Hosting.Diagnostics[2]
+      Request finished HTTP/1.1 GET http://localhost:5001/index.html - 200 - text/html;charset=utf-8 0.3055ms
+info: Microsoft.AspNetCore.Hosting.Diagnostics[1]
+      Request starting HTTP/1.1 GET http://localhost:5001/index.js - - -
+info: Microsoft.AspNetCore.Hosting.Diagnostics[2]
+      Request finished HTTP/1.1 GET http://localhost:5001/index.js - 200 - application/javascript;charset=utf-8 0.1874ms
+info: Microsoft.AspNetCore.Hosting.Diagnostics[1]
+      Request starting HTTP/1.1 GET http://localhost:5001/swagger/v1/swagger.json - - -
+info: Microsoft.AspNetCore.Hosting.Diagnostics[2]
+      Request finished HTTP/1.1 GET http://localhost:5001/swagger/v1/swagger.json - 200 - application/json;charset=utf-8 2.6924ms
+info: Microsoft.AspNetCore.Hosting.Diagnostics[1]
+      Request starting HTTP/1.1 GET http://localhost:5001/index.html - - -
+info: Microsoft.AspNetCore.Hosting.Diagnostics[2]
+      Request finished HTTP/1.1 GET http://localhost:5001/index.html - 200 - text/html;charset=utf-8 2.3007ms
+info: Microsoft.AspNetCore.Hosting.Diagnostics[1]
+      Request starting HTTP/1.1 GET http://localhost:5001/index.js - - -
+info: Microsoft.AspNetCore.Hosting.Diagnostics[2]
+      Request finished HTTP/1.1 GET http://localhost:5001/index.js - 200 - application/javascript;charset=utf-8 1.1534ms
+info: Microsoft.AspNetCore.Hosting.Diagnostics[1]
+      Request starting HTTP/1.1 GET http://localhost:5001/swagger/v1/swagger.json - - -
+info: Microsoft.AspNetCore.Hosting.Diagnostics[2]
+      Request finished HTTP/1.1 GET http://localhost:5001/swagger/v1/swagger.json - 200 - application/json;charset=utf-8 8.1294ms
+info: Microsoft.AspNetCore.Hosting.Diagnostics[1]
+      Request starting HTTP/1.1 GET http://localhost:5001/index.html - - -
+info: Microsoft.AspNetCore.Hosting.Diagnostics[2]
+      Request finished HTTP/1.1 GET http://localhost:5001/index.html - 200 - text/html;charset=utf-8 0.2620ms
+info: Microsoft.AspNetCore.Hosting.Diagnostics[1]
+      Request starting HTTP/1.1 GET http://localhost:5001/index.js - - -
+info: Microsoft.AspNetCore.Hosting.Diagnostics[2]
+      Request finished HTTP/1.1 GET http://localhost:5001/index.js - 200 - application/javascript;charset=utf-8 1.0855ms
+info: Microsoft.AspNetCore.Hosting.Diagnostics[1]
+      Request starting HTTP/1.1 GET http://localhost:5001/swagger/v1/swagger.json - - -
+info: Microsoft.AspNetCore.Hosting.Diagnostics[2]
+      Request finished HTTP/1.1 GET http://localhost:5001/swagger/v1/swagger.json - 200 - application/json;charset=utf-8 4.9796ms
+info: Microsoft.AspNetCore.Hosting.Diagnostics[1]
+      Request starting HTTP/1.1 GET http://localhost:5001/api/exams - - -
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[0]
+      Executing endpoint 'Laborator4_AI.Api.Controllers.ExamsController.GetAllExams (Laborator4-AI)'
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker[102]
+      Route matched with {action = "GetAllExams", controller = "Exams"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[Laborator4_AI.Api.Models.ApiResponse`1[System.Collections.Generic.List`1[Laborator4_AI.Api.Models.ExamDto]]]] GetAllExams() on controller Laborator4_AI.Api.Controllers.ExamsController (Laborator4-AI).
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (20ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT r."Id", r."CourseCode", r."Date" AS "ExamDate", r."RoomNumber", (
+          SELECT count(*)::int
+          FROM "StudentRegistrations" AS s
+          WHERE s."CourseCode" = r."CourseCode" AND s."ExamDate" = r."Date") AS "RegisteredStudentsCount"
+      FROM "Reservations" AS r
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (3ms) [Parameters=[@__exam_RoomNumber_0='?'], CommandType='Text', CommandTimeout='30']
+      SELECT r."Number", r."Capacity"
+      FROM "Rooms" AS r
+      WHERE r."Number" = @__exam_RoomNumber_0
+      LIMIT 1
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ObjectResultExecutor[1]
+      Executing OkObjectResult, writing value of type 'Laborator4_AI.Api.Models.ApiResponse`1[[System.Collections.Generic.List`1[[Laborator4_AI.Api.Models.ExamDto, Laborator4-AI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker[105]
+      Executed action Laborator4_AI.Api.Controllers.ExamsController.GetAllExams (Laborator4-AI) in 89.5661ms
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[1]
+      Executed endpoint 'Laborator4_AI.Api.Controllers.ExamsController.GetAllExams (Laborator4-AI)'
+info: Microsoft.AspNetCore.Hosting.Diagnostics[2]
+      Request finished HTTP/1.1 GET http://localhost:5001/api/exams - 200 - application/json;+charset=utf-8 95.9033ms
+info: Microsoft.AspNetCore.Hosting.Diagnostics[1]
+      Request starting HTTP/1.1 GET http://localhost:5001/api/exams - - -
+info: Microsoft.AspNetCore.Cors.Infrastructure.CorsService[4]
+      CORS policy execution successful.
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[0]
+      Executing endpoint 'Laborator4_AI.Api.Controllers.ExamsController.GetAllExams (Laborator4-AI)'
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker[102]
+      Route matched with {action = "GetAllExams", controller = "Exams"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[Laborator4_AI.Api.Models.ApiResponse`1[System.Collections.Generic.List`1[Laborator4_AI.Api.Models.ExamDto]]]] GetAllExams() on controller Laborator4_AI.Api.Controllers.ExamsController (Laborator4-AI).
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT r."Id", r."CourseCode", r."Date" AS "ExamDate", r."RoomNumber", (
+          SELECT count(*)::int
+          FROM "StudentRegistrations" AS s
+          WHERE s."CourseCode" = r."CourseCode" AND s."ExamDate" = r."Date") AS "RegisteredStudentsCount"
+      FROM "Reservations" AS r
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@__exam_RoomNumber_0='?'], CommandType='Text', CommandTimeout='30']
+      SELECT r."Number", r."Capacity"
+      FROM "Rooms" AS r
+      WHERE r."Number" = @__exam_RoomNumber_0
+      LIMIT 1
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ObjectResultExecutor[1]
+      Executing OkObjectResult, writing value of type 'Laborator4_AI.Api.Models.ApiResponse`1[[System.Collections.Generic.List`1[[Laborator4_AI.Api.Models.ExamDto, Laborator4-AI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker[105]
+      Executed action Laborator4_AI.Api.Controllers.ExamsController.GetAllExams (Laborator4-AI) in 8.9852ms
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[1]
+      Executed endpoint 'Laborator4_AI.Api.Controllers.ExamsController.GetAllExams (Laborator4-AI)'
+info: Microsoft.AspNetCore.Hosting.Diagnostics[2]
+      Request finished HTTP/1.1 GET http://localhost:5001/api/exams - 200 - application/json;+charset=utf-8 12.8840ms
+info: Microsoft.AspNetCore.Hosting.Diagnostics[1]
+      Request starting HTTP/1.1 GET http://localhost:5001/api/students/registrations - - -
+info: Microsoft.AspNetCore.Cors.Infrastructure.CorsService[4]
+      CORS policy execution successful.
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[0]
+      Executing endpoint 'Laborator4_AI.Api.Controllers.StudentsController.GetAllRegistrations (Laborator4-AI)'
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker[102]
+      Route matched with {action = "GetAllRegistrations", controller = "Students"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[Laborator4_AI.Api.Models.ApiResponse`1[System.Collections.Generic.List`1[Laborator4_AI.Api.Models.StudentRegistrationDto]]]] GetAllRegistrations() on controller Laborator4_AI.Api.Controllers.StudentsController (Laborator4-AI).
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (10ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT s."Id", s."StudentRegNumber" AS "StudentRegistrationNumber", s."CourseCode", s."ExamDate", s."RoomNumber", s."RegisteredAt"
+      FROM "StudentRegistrations" AS s
+      ORDER BY s."RegisteredAt" DESC
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ObjectResultExecutor[1]
+      Executing OkObjectResult, writing value of type 'Laborator4_AI.Api.Models.ApiResponse`1[[System.Collections.Generic.List`1[[Laborator4_AI.Api.Models.StudentRegistrationDto, Laborator4-AI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker[105]
+      Executed action Laborator4_AI.Api.Controllers.StudentsController.GetAllRegistrations (Laborator4-AI) in 23.0956ms
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[1]
+      Executed endpoint 'Laborator4_AI.Api.Controllers.StudentsController.GetAllRegistrations (Laborator4-AI)'
+info: Microsoft.AspNetCore.Hosting.Diagnostics[2]
+      Request finished HTTP/1.1 GET http://localhost:5001/api/students/registrations - 200 - application/json;+charset=utf-8 23.9935ms
+info: Microsoft.AspNetCore.Hosting.Diagnostics[1]
+      Request starting HTTP/1.1 GET http://localhost:5001/api/grades - - -
+info: Microsoft.AspNetCore.Cors.Infrastructure.CorsService[4]
+      CORS policy execution successful.
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[0]
+      Executing endpoint 'Laborator4_AI.Api.Controllers.GradesController.GetAllGrades (Laborator4-AI)'
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker[102]
+      Route matched with {action = "GetAllGrades", controller = "Grades"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[Laborator4_AI.Api.Models.ApiResponse`1[System.Collections.Generic.List`1[Laborator4_AI.Api.Models.GradeDto]]]] GetAllGrades() on controller Laborator4_AI.Api.Controllers.GradesController (Laborator4-AI).
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (7ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT e."Id", e."StudentRegNumber" AS "StudentRegistrationNumber", e."CourseCode", e."ExamDate", e."Grade", e."Grade" >= 5.0 AS "IsPassing", COALESCE(e."PublishedAt", now() AT TIME ZONE 'UTC') AS "PublishedAt"
+      FROM "ExamGrades" AS e
+      ORDER BY COALESCE(e."PublishedAt", now() AT TIME ZONE 'UTC') DESC
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ObjectResultExecutor[1]
+      Executing OkObjectResult, writing value of type 'Laborator4_AI.Api.Models.ApiResponse`1[[System.Collections.Generic.List`1[[Laborator4_AI.Api.Models.GradeDto, Laborator4-AI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker[105]
+      Executed action Laborator4_AI.Api.Controllers.GradesController.GetAllGrades (Laborator4-AI) in 10.1154ms
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[1]
+      Executed endpoint 'Laborator4_AI.Api.Controllers.GradesController.GetAllGrades (Laborator4-AI)'
+info: Microsoft.AspNetCore.Hosting.Diagnostics[2]
+      Request finished HTTP/1.1 GET http://localhost:5001/api/grades - 200 - application/json;+charset=utf-8 10.6090ms
+info: Microsoft.AspNetCore.Hosting.Diagnostics[1]
+      Request starting HTTP/1.1 GET http://localhost:5001/api/exams/rooms - - -
+info: Microsoft.AspNetCore.Cors.Infrastructure.CorsService[4]
+      CORS policy execution successful.
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[0]
+      Executing endpoint 'Laborator4_AI.Api.Controllers.ExamsController.GetRooms (Laborator4-AI)'
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker[102]
+      Route matched with {action = "GetRooms", controller = "Exams"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[Laborator4_AI.Api.Models.ApiResponse`1[System.Collections.Generic.List`1[System.Object]]]] GetRooms() on controller Laborator4_AI.Api.Controllers.ExamsController (Laborator4-AI).
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT r."Number", r."Capacity"
+      FROM "Rooms" AS r
+      ORDER BY r."Number"
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ObjectResultExecutor[1]
+      Executing OkObjectResult, writing value of type 'Laborator4_AI.Api.Models.ApiResponse`1[[System.Collections.Generic.List`1[[System.Object, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]], System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker[105]
+      Executed action Laborator4_AI.Api.Controllers.ExamsController.GetRooms (Laborator4-AI) in 2.9348ms
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[1]
+      Executed endpoint 'Laborator4_AI.Api.Controllers.ExamsController.GetRooms (Laborator4-AI)'
+info: Microsoft.AspNetCore.Hosting.Diagnostics[2]
+      Request finished HTTP/1.1 GET http://localhost:5001/api/exams/rooms - 200 - application/json;+charset=utf-8 3.2910ms
+info: Microsoft.AspNetCore.Hosting.Diagnostics[1]
+      Request starting HTTP/1.1 GET http://localhost:5001/api/exams - - -
+info: Microsoft.AspNetCore.Cors.Infrastructure.CorsService[4]
+      CORS policy execution successful.
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[0]
+      Executing endpoint 'Laborator4_AI.Api.Controllers.ExamsController.GetAllExams (Laborator4-AI)'
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker[102]
+      Route matched with {action = "GetAllExams", controller = "Exams"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[Laborator4_AI.Api.Models.ApiResponse`1[System.Collections.Generic.List`1[Laborator4_AI.Api.Models.ExamDto]]]] GetAllExams() on controller Laborator4_AI.Api.Controllers.ExamsController (Laborator4-AI).
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (2ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT r."Id", r."CourseCode", r."Date" AS "ExamDate", r."RoomNumber", (
+          SELECT count(*)::int
+          FROM "StudentRegistrations" AS s
+          WHERE s."CourseCode" = r."CourseCode" AND s."ExamDate" = r."Date") AS "RegisteredStudentsCount"
+      FROM "Reservations" AS r
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@__exam_RoomNumber_0='?'], CommandType='Text', CommandTimeout='30']
+      SELECT r."Number", r."Capacity"
+      FROM "Rooms" AS r
+      WHERE r."Number" = @__exam_RoomNumber_0
+      LIMIT 1
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ObjectResultExecutor[1]
+      Executing OkObjectResult, writing value of type 'Laborator4_AI.Api.Models.ApiResponse`1[[System.Collections.Generic.List`1[[Laborator4_AI.Api.Models.ExamDto, Laborator4-AI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker[105]
+      Executed action Laborator4_AI.Api.Controllers.ExamsController.GetAllExams (Laborator4-AI) in 7.0104ms
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[1]
+      Executed endpoint 'Laborator4_AI.Api.Controllers.ExamsController.GetAllExams (Laborator4-AI)'
+info: Microsoft.AspNetCore.Hosting.Diagnostics[2]
+      Request finished HTTP/1.1 GET http://localhost:5001/api/exams - 200 - application/json;+charset=utf-8 7.4240ms
+info: Microsoft.AspNetCore.Hosting.Diagnostics[1]
+      Request starting HTTP/1.1 GET http://localhost:5001/api/students/registrations - - -
+info: Microsoft.AspNetCore.Cors.Infrastructure.CorsService[4]
+      CORS policy execution successful.
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[0]
+      Executing endpoint 'Laborator4_AI.Api.Controllers.StudentsController.GetAllRegistrations (Laborator4-AI)'
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker[102]
+      Route matched with {action = "GetAllRegistrations", controller = "Students"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[Laborator4_AI.Api.Models.ApiResponse`1[System.Collections.Generic.List`1[Laborator4_AI.Api.Models.StudentRegistrationDto]]]] GetAllRegistrations() on controller Laborator4_AI.Api.Controllers.StudentsController (Laborator4-AI).
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (2ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT s."Id", s."StudentRegNumber" AS "StudentRegistrationNumber", s."CourseCode", s."ExamDate", s."RoomNumber", s."RegisteredAt"
+      FROM "StudentRegistrations" AS s
+      ORDER BY s."RegisteredAt" DESC
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ObjectResultExecutor[1]
+      Executing OkObjectResult, writing value of type 'Laborator4_AI.Api.Models.ApiResponse`1[[System.Collections.Generic.List`1[[Laborator4_AI.Api.Models.StudentRegistrationDto, Laborator4-AI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker[105]
+      Executed action Laborator4_AI.Api.Controllers.StudentsController.GetAllRegistrations (Laborator4-AI) in 3.3114ms
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[1]
+      Executed endpoint 'Laborator4_AI.Api.Controllers.StudentsController.GetAllRegistrations (Laborator4-AI)'
+info: Microsoft.AspNetCore.Hosting.Diagnostics[2]
+      Request finished HTTP/1.1 GET http://localhost:5001/api/students/registrations - 200 - application/json;+charset=utf-8 3.8375ms
+info: Microsoft.AspNetCore.Hosting.Diagnostics[1]
+      Request starting HTTP/1.1 GET http://localhost:5001/api/grades - - -
+info: Microsoft.AspNetCore.Cors.Infrastructure.CorsService[4]
+      CORS policy execution successful.
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[0]
+      Executing endpoint 'Laborator4_AI.Api.Controllers.GradesController.GetAllGrades (Laborator4-AI)'
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker[102]
+      Route matched with {action = "GetAllGrades", controller = "Grades"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[Laborator4_AI.Api.Models.ApiResponse`1[System.Collections.Generic.List`1[Laborator4_AI.Api.Models.GradeDto]]]] GetAllGrades() on controller Laborator4_AI.Api.Controllers.GradesController (Laborator4-AI).
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (2ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT e."Id", e."StudentRegNumber" AS "StudentRegistrationNumber", e."CourseCode", e."ExamDate", e."Grade", e."Grade" >= 5.0 AS "IsPassing", COALESCE(e."PublishedAt", now() AT TIME ZONE 'UTC') AS "PublishedAt"
+      FROM "ExamGrades" AS e
+      ORDER BY COALESCE(e."PublishedAt", now() AT TIME ZONE 'UTC') DESC
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ObjectResultExecutor[1]
+      Executing OkObjectResult, writing value of type 'Laborator4_AI.Api.Models.ApiResponse`1[[System.Collections.Generic.List`1[[Laborator4_AI.Api.Models.GradeDto, Laborator4-AI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker[105]
+      Executed action Laborator4_AI.Api.Controllers.GradesController.GetAllGrades (Laborator4-AI) in 5.5228ms
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[1]
+      Executed endpoint 'Laborator4_AI.Api.Controllers.GradesController.GetAllGrades (Laborator4-AI)'
+info: Microsoft.AspNetCore.Hosting.Diagnostics[2]
+      Request finished HTTP/1.1 GET http://localhost:5001/api/grades - 200 - application/json;+charset=utf-8 6.2280ms
+info: Microsoft.AspNetCore.Hosting.Diagnostics[1]
+      Request starting HTTP/1.1 GET http://localhost:5001/api/exams - - -
+info: Microsoft.AspNetCore.Cors.Infrastructure.CorsService[4]
+      CORS policy execution successful.
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[0]
+      Executing endpoint 'Laborator4_AI.Api.Controllers.ExamsController.GetAllExams (Laborator4-AI)'
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker[102]
+      Route matched with {action = "GetAllExams", controller = "Exams"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[Laborator4_AI.Api.Models.ApiResponse`1[System.Collections.Generic.List`1[Laborator4_AI.Api.Models.ExamDto]]]] GetAllExams() on controller Laborator4_AI.Api.Controllers.ExamsController (Laborator4-AI).
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (2ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT r."Id", r."CourseCode", r."Date" AS "ExamDate", r."RoomNumber", (
+          SELECT count(*)::int
+          FROM "StudentRegistrations" AS s
+          WHERE s."CourseCode" = r."CourseCode" AND s."ExamDate" = r."Date") AS "RegisteredStudentsCount"
+      FROM "Reservations" AS r
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (1ms) [Parameters=[@__exam_RoomNumber_0='?'], CommandType='Text', CommandTimeout='30']
+      SELECT r."Number", r."Capacity"
+      FROM "Rooms" AS r
+      WHERE r."Number" = @__exam_RoomNumber_0
+      LIMIT 1
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ObjectResultExecutor[1]
+      Executing OkObjectResult, writing value of type 'Laborator4_AI.Api.Models.ApiResponse`1[[System.Collections.Generic.List`1[[Laborator4_AI.Api.Models.ExamDto, Laborator4-AI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker[105]
+      Executed action Laborator4_AI.Api.Controllers.ExamsController.GetAllExams (Laborator4-AI) in 5.9262ms
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[1]
+      Executed endpoint 'Laborator4_AI.Api.Controllers.ExamsController.GetAllExams (Laborator4-AI)'
+info: Microsoft.AspNetCore.Hosting.Diagnostics[2]
+      Request finished HTTP/1.1 GET http://localhost:5001/api/exams - 200 - application/json;+charset=utf-8 6.4970ms
+info: Microsoft.AspNetCore.Hosting.Diagnostics[1]
+      Request starting HTTP/1.1 GET http://localhost:5001/api/students/registrations - - -
+info: Microsoft.AspNetCore.Cors.Infrastructure.CorsService[4]
+      CORS policy execution successful.
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[0]
+      Executing endpoint 'Laborator4_AI.Api.Controllers.StudentsController.GetAllRegistrations (Laborator4-AI)'
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker[102]
+      Route matched with {action = "GetAllRegistrations", controller = "Students"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[Laborator4_AI.Api.Models.ApiResponse`1[System.Collections.Generic.List`1[Laborator4_AI.Api.Models.StudentRegistrationDto]]]] GetAllRegistrations() on controller Laborator4_AI.Api.Controllers.StudentsController (Laborator4-AI).
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT s."Id", s."StudentRegNumber" AS "StudentRegistrationNumber", s."CourseCode", s."ExamDate", s."RoomNumber", s."RegisteredAt"
+      FROM "StudentRegistrations" AS s
+      ORDER BY s."RegisteredAt" DESC
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ObjectResultExecutor[1]
+      Executing OkObjectResult, writing value of type 'Laborator4_AI.Api.Models.ApiResponse`1[[System.Collections.Generic.List`1[[Laborator4_AI.Api.Models.StudentRegistrationDto, Laborator4-AI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker[105]
+      Executed action Laborator4_AI.Api.Controllers.StudentsController.GetAllRegistrations (Laborator4-AI) in 1.9457ms
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[1]
+      Executed endpoint 'Laborator4_AI.Api.Controllers.StudentsController.GetAllRegistrations (Laborator4-AI)'
+info: Microsoft.AspNetCore.Hosting.Diagnostics[2]
+      Request finished HTTP/1.1 GET http://localhost:5001/api/students/registrations - 200 - application/json;+charset=utf-8 2.3231ms
+info: Microsoft.AspNetCore.Hosting.Diagnostics[1]
+      Request starting HTTP/1.1 GET http://localhost:5001/api/grades - - -
+info: Microsoft.AspNetCore.Cors.Infrastructure.CorsService[4]
+      CORS policy execution successful.
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[0]
+      Executing endpoint 'Laborator4_AI.Api.Controllers.GradesController.GetAllGrades (Laborator4-AI)'
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker[102]
+      Route matched with {action = "GetAllGrades", controller = "Grades"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[Laborator4_AI.Api.Models.ApiResponse`1[System.Collections.Generic.List`1[Laborator4_AI.Api.Models.GradeDto]]]] GetAllGrades() on controller Laborator4_AI.Api.Controllers.GradesController (Laborator4-AI).
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT e."Id", e."StudentRegNumber" AS "StudentRegistrationNumber", e."CourseCode", e."ExamDate", e."Grade", e."Grade" >= 5.0 AS "IsPassing", COALESCE(e."PublishedAt", now() AT TIME ZONE 'UTC') AS "PublishedAt"
+      FROM "ExamGrades" AS e
+      ORDER BY COALESCE(e."PublishedAt", now() AT TIME ZONE 'UTC') DESC
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ObjectResultExecutor[1]
+      Executing OkObjectResult, writing value of type 'Laborator4_AI.Api.Models.ApiResponse`1[[System.Collections.Generic.List`1[[Laborator4_AI.Api.Models.GradeDto, Laborator4-AI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker[105]
+      Executed action Laborator4_AI.Api.Controllers.GradesController.GetAllGrades (Laborator4-AI) in 2.6805ms
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[1]
+      Executed endpoint 'Laborator4_AI.Api.Controllers.GradesController.GetAllGrades (Laborator4-AI)'
+info: Microsoft.AspNetCore.Hosting.Diagnostics[2]
+      Request finished HTTP/1.1 GET http://localhost:5001/api/grades - 200 - application/json;+charset=utf-8 3.1217ms
+info: Microsoft.AspNetCore.Hosting.Diagnostics[1]
+      Request starting HTTP/1.1 GET http://localhost:5001/api/exams/rooms - - -
+info: Microsoft.AspNetCore.Cors.Infrastructure.CorsService[4]
+      CORS policy execution successful.
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[0]
+      Executing endpoint 'Laborator4_AI.Api.Controllers.ExamsController.GetRooms (Laborator4-AI)'
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker[102]
+      Route matched with {action = "GetRooms", controller = "Exams"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[Laborator4_AI.Api.Models.ApiResponse`1[System.Collections.Generic.List`1[System.Object]]]] GetRooms() on controller Laborator4_AI.Api.Controllers.ExamsController (Laborator4-AI).
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (3ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT r."Number", r."Capacity"
+      FROM "Rooms" AS r
+      ORDER BY r."Number"
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ObjectResultExecutor[1]
+      Executing OkObjectResult, writing value of type 'Laborator4_AI.Api.Models.ApiResponse`1[[System.Collections.Generic.List`1[[System.Object, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]], System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker[105]
+      Executed action Laborator4_AI.Api.Controllers.ExamsController.GetRooms (Laborator4-AI) in 3.3568ms
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[1]
+      Executed endpoint 'Laborator4_AI.Api.Controllers.ExamsController.GetRooms (Laborator4-AI)'
+info: Microsoft.AspNetCore.Hosting.Diagnostics[2]
+      Request finished HTTP/1.1 GET http://localhost:5001/api/exams/rooms - 200 - application/json;+charset=utf-8 3.5727ms
+info: Microsoft.AspNetCore.Hosting.Diagnostics[1]
+      Request starting HTTP/1.1 GET http://localhost:5001/api/exams - - -
+info: Microsoft.AspNetCore.Cors.Infrastructure.CorsService[4]
+      CORS policy execution successful.
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[0]
+      Executing endpoint 'Laborator4_AI.Api.Controllers.ExamsController.GetAllExams (Laborator4-AI)'
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker[102]
+      Route matched with {action = "GetAllExams", controller = "Exams"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[Laborator4_AI.Api.Models.ApiResponse`1[System.Collections.Generic.List`1[Laborator4_AI.Api.Models.ExamDto]]]] GetAllExams() on controller Laborator4_AI.Api.Controllers.ExamsController (Laborator4-AI).
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT r."Id", r."CourseCode", r."Date" AS "ExamDate", r."RoomNumber", (
+          SELECT count(*)::int
+          FROM "StudentRegistrations" AS s
+          WHERE s."CourseCode" = r."CourseCode" AND s."ExamDate" = r."Date") AS "RegisteredStudentsCount"
+      FROM "Reservations" AS r
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@__exam_RoomNumber_0='?'], CommandType='Text', CommandTimeout='30']
+      SELECT r."Number", r."Capacity"
+      FROM "Rooms" AS r
+      WHERE r."Number" = @__exam_RoomNumber_0
+      LIMIT 1
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ObjectResultExecutor[1]
+      Executing OkObjectResult, writing value of type 'Laborator4_AI.Api.Models.ApiResponse`1[[System.Collections.Generic.List`1[[Laborator4_AI.Api.Models.ExamDto, Laborator4-AI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker[105]
+      Executed action Laborator4_AI.Api.Controllers.ExamsController.GetAllExams (Laborator4-AI) in 1.3517ms
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[1]
+      Executed endpoint 'Laborator4_AI.Api.Controllers.ExamsController.GetAllExams (Laborator4-AI)'
+info: Microsoft.AspNetCore.Hosting.Diagnostics[2]
+      Request finished HTTP/1.1 GET http://localhost:5001/api/exams - 200 - application/json;+charset=utf-8 1.6908ms
+info: Microsoft.AspNetCore.Hosting.Diagnostics[1]
+      Request starting HTTP/1.1 GET http://localhost:5001/api/exams - - -
+info: Microsoft.AspNetCore.Cors.Infrastructure.CorsService[4]
+      CORS policy execution successful.
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[0]
+      Executing endpoint 'Laborator4_AI.Api.Controllers.ExamsController.GetAllExams (Laborator4-AI)'
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker[102]
+      Route matched with {action = "GetAllExams", controller = "Exams"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[Laborator4_AI.Api.Models.ApiResponse`1[System.Collections.Generic.List`1[Laborator4_AI.Api.Models.ExamDto]]]] GetAllExams() on controller Laborator4_AI.Api.Controllers.ExamsController (Laborator4-AI).
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT r."Id", r."CourseCode", r."Date" AS "ExamDate", r."RoomNumber", (
+          SELECT count(*)::int
+          FROM "StudentRegistrations" AS s
+          WHERE s."CourseCode" = r."CourseCode" AND s."ExamDate" = r."Date") AS "RegisteredStudentsCount"
+      FROM "Reservations" AS r
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@__exam_RoomNumber_0='?'], CommandType='Text', CommandTimeout='30']
+      SELECT r."Number", r."Capacity"
+      FROM "Rooms" AS r
+      WHERE r."Number" = @__exam_RoomNumber_0
+      LIMIT 1
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ObjectResultExecutor[1]
+      Executing OkObjectResult, writing value of type 'Laborator4_AI.Api.Models.ApiResponse`1[[System.Collections.Generic.List`1[[Laborator4_AI.Api.Models.ExamDto, Laborator4-AI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker[105]
+      Executed action Laborator4_AI.Api.Controllers.ExamsController.GetAllExams (Laborator4-AI) in 1.2263ms
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[1]
+      Executed endpoint 'Laborator4_AI.Api.Controllers.ExamsController.GetAllExams (Laborator4-AI)'
+info: Microsoft.AspNetCore.Hosting.Diagnostics[2]
+      Request finished HTTP/1.1 GET http://localhost:5001/api/exams - 200 - application/json;+charset=utf-8 1.6164ms
+info: Microsoft.AspNetCore.Hosting.Diagnostics[1]
+      Request starting HTTP/1.1 GET http://localhost:5001/api/exams - - -
+info: Microsoft.AspNetCore.Cors.Infrastructure.CorsService[4]
+      CORS policy execution successful.
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[0]
+      Executing endpoint 'Laborator4_AI.Api.Controllers.ExamsController.GetAllExams (Laborator4-AI)'
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker[102]
+      Route matched with {action = "GetAllExams", controller = "Exams"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[Laborator4_AI.Api.Models.ApiResponse`1[System.Collections.Generic.List`1[Laborator4_AI.Api.Models.ExamDto]]]] GetAllExams() on controller Laborator4_AI.Api.Controllers.ExamsController (Laborator4-AI).
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT r."Id", r."CourseCode", r."Date" AS "ExamDate", r."RoomNumber", (
+          SELECT count(*)::int
+          FROM "StudentRegistrations" AS s
+          WHERE s."CourseCode" = r."CourseCode" AND s."ExamDate" = r."Date") AS "RegisteredStudentsCount"
+      FROM "Reservations" AS r
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@__exam_RoomNumber_0='?'], CommandType='Text', CommandTimeout='30']
+      SELECT r."Number", r."Capacity"
+      FROM "Rooms" AS r
+      WHERE r."Number" = @__exam_RoomNumber_0
+      LIMIT 1
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ObjectResultExecutor[1]
+      Executing OkObjectResult, writing value of type 'Laborator4_AI.Api.Models.ApiResponse`1[[System.Collections.Generic.List`1[[Laborator4_AI.Api.Models.ExamDto, Laborator4-AI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker[105]
+      Executed action Laborator4_AI.Api.Controllers.ExamsController.GetAllExams (Laborator4-AI) in 4.0967ms
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[1]
+      Executed endpoint 'Laborator4_AI.Api.Controllers.ExamsController.GetAllExams (Laborator4-AI)'
+info: Microsoft.AspNetCore.Hosting.Diagnostics[2]
+      Request finished HTTP/1.1 GET http://localhost:5001/api/exams - 200 - application/json;+charset=utf-8 5.4735ms
+info: Microsoft.AspNetCore.Hosting.Diagnostics[1]
+      Request starting HTTP/1.1 GET http://localhost:5001/api/students/registrations - - -
+info: Microsoft.AspNetCore.Cors.Infrastructure.CorsService[4]
+      CORS policy execution successful.
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[0]
+      Executing endpoint 'Laborator4_AI.Api.Controllers.StudentsController.GetAllRegistrations (Laborator4-AI)'
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker[102]
+      Route matched with {action = "GetAllRegistrations", controller = "Students"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[Laborator4_AI.Api.Models.ApiResponse`1[System.Collections.Generic.List`1[Laborator4_AI.Api.Models.StudentRegistrationDto]]]] GetAllRegistrations() on controller Laborator4_AI.Api.Controllers.StudentsController (Laborator4-AI).
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT s."Id", s."StudentRegNumber" AS "StudentRegistrationNumber", s."CourseCode", s."ExamDate", s."RoomNumber", s."RegisteredAt"
+      FROM "StudentRegistrations" AS s
+      ORDER BY s."RegisteredAt" DESC
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ObjectResultExecutor[1]
+      Executing OkObjectResult, writing value of type 'Laborator4_AI.Api.Models.ApiResponse`1[[System.Collections.Generic.List`1[[Laborator4_AI.Api.Models.StudentRegistrationDto, Laborator4-AI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker[105]
+      Executed action Laborator4_AI.Api.Controllers.StudentsController.GetAllRegistrations (Laborator4-AI) in 2.103ms
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[1]
+      Executed endpoint 'Laborator4_AI.Api.Controllers.StudentsController.GetAllRegistrations (Laborator4-AI)'
+info: Microsoft.AspNetCore.Hosting.Diagnostics[2]
+      Request finished HTTP/1.1 GET http://localhost:5001/api/students/registrations - 200 - application/json;+charset=utf-8 2.5493ms
+info: Microsoft.AspNetCore.Hosting.Diagnostics[1]
+      Request starting HTTP/1.1 GET http://localhost:5001/api/grades - - -
+info: Microsoft.AspNetCore.Cors.Infrastructure.CorsService[4]
+      CORS policy execution successful.
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[0]
+      Executing endpoint 'Laborator4_AI.Api.Controllers.GradesController.GetAllGrades (Laborator4-AI)'
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker[102]
+      Route matched with {action = "GetAllGrades", controller = "Grades"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[Laborator4_AI.Api.Models.ApiResponse`1[System.Collections.Generic.List`1[Laborator4_AI.Api.Models.GradeDto]]]] GetAllGrades() on controller Laborator4_AI.Api.Controllers.GradesController (Laborator4-AI).
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT e."Id", e."StudentRegNumber" AS "StudentRegistrationNumber", e."CourseCode", e."ExamDate", e."Grade", e."Grade" >= 5.0 AS "IsPassing", COALESCE(e."PublishedAt", now() AT TIME ZONE 'UTC') AS "PublishedAt"
+      FROM "ExamGrades" AS e
+      ORDER BY COALESCE(e."PublishedAt", now() AT TIME ZONE 'UTC') DESC
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ObjectResultExecutor[1]
+      Executing OkObjectResult, writing value of type 'Laborator4_AI.Api.Models.ApiResponse`1[[System.Collections.Generic.List`1[[Laborator4_AI.Api.Models.GradeDto, Laborator4-AI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker[105]
+      Executed action Laborator4_AI.Api.Controllers.GradesController.GetAllGrades (Laborator4-AI) in 1.891ms
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[1]
+      Executed endpoint 'Laborator4_AI.Api.Controllers.GradesController.GetAllGrades (Laborator4-AI)'
+info: Microsoft.AspNetCore.Hosting.Diagnostics[2]
+      Request finished HTTP/1.1 GET http://localhost:5001/api/grades - 200 - application/json;+charset=utf-8 2.1591ms
+info: Microsoft.AspNetCore.Hosting.Diagnostics[1]
+      Request starting HTTP/1.1 GET http://localhost:5001/api/exams/rooms - - -
+info: Microsoft.AspNetCore.Cors.Infrastructure.CorsService[4]
+      CORS policy execution successful.
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[0]
+      Executing endpoint 'Laborator4_AI.Api.Controllers.ExamsController.GetRooms (Laborator4-AI)'
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker[102]
+      Route matched with {action = "GetRooms", controller = "Exams"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[Laborator4_AI.Api.Models.ApiResponse`1[System.Collections.Generic.List`1[System.Object]]]] GetRooms() on controller Laborator4_AI.Api.Controllers.ExamsController (Laborator4-AI).
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (2ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT r."Number", r."Capacity"
+      FROM "Rooms" AS r
+      ORDER BY r."Number"
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ObjectResultExecutor[1]
+      Executing OkObjectResult, writing value of type 'Laborator4_AI.Api.Models.ApiResponse`1[[System.Collections.Generic.List`1[[System.Object, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]], System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker[105]
+      Executed action Laborator4_AI.Api.Controllers.ExamsController.GetRooms (Laborator4-AI) in 2.2888ms
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[1]
+      Executed endpoint 'Laborator4_AI.Api.Controllers.ExamsController.GetRooms (Laborator4-AI)'
+info: Microsoft.AspNetCore.Hosting.Diagnostics[2]
+      Request finished HTTP/1.1 GET http://localhost:5001/api/exams/rooms - 200 - application/json;+charset=utf-8 2.5262ms
+info: Microsoft.AspNetCore.Hosting.Diagnostics[1]
+      Request starting HTTP/1.1 GET http://localhost:5001/api/students/registrations - - -
+info: Microsoft.AspNetCore.Cors.Infrastructure.CorsService[4]
+      CORS policy execution successful.
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[0]
+      Executing endpoint 'Laborator4_AI.Api.Controllers.StudentsController.GetAllRegistrations (Laborator4-AI)'
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker[102]
+      Route matched with {action = "GetAllRegistrations", controller = "Students"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[Laborator4_AI.Api.Models.ApiResponse`1[System.Collections.Generic.List`1[Laborator4_AI.Api.Models.StudentRegistrationDto]]]] GetAllRegistrations() on controller Laborator4_AI.Api.Controllers.StudentsController (Laborator4-AI).
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT s."Id", s."StudentRegNumber" AS "StudentRegistrationNumber", s."CourseCode", s."ExamDate", s."RoomNumber", s."RegisteredAt"
+      FROM "StudentRegistrations" AS s
+      ORDER BY s."RegisteredAt" DESC
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ObjectResultExecutor[1]
+      Executing OkObjectResult, writing value of type 'Laborator4_AI.Api.Models.ApiResponse`1[[System.Collections.Generic.List`1[[Laborator4_AI.Api.Models.StudentRegistrationDto, Laborator4-AI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker[105]
+      Executed action Laborator4_AI.Api.Controllers.StudentsController.GetAllRegistrations (Laborator4-AI) in 4.5207ms
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[1]
+      Executed endpoint 'Laborator4_AI.Api.Controllers.StudentsController.GetAllRegistrations (Laborator4-AI)'
+info: Microsoft.AspNetCore.Hosting.Diagnostics[2]
+      Request finished HTTP/1.1 GET http://localhost:5001/api/students/registrations - 200 - application/json;+charset=utf-8 5.7367ms
+info: Microsoft.AspNetCore.Hosting.Diagnostics[1]
+      Request starting HTTP/1.1 GET http://localhost:5001/api/exams - - -
+info: Microsoft.AspNetCore.Cors.Infrastructure.CorsService[4]
+      CORS policy execution successful.
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[0]
+      Executing endpoint 'Laborator4_AI.Api.Controllers.ExamsController.GetAllExams (Laborator4-AI)'
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker[102]
+      Route matched with {action = "GetAllExams", controller = "Exams"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[Laborator4_AI.Api.Models.ApiResponse`1[System.Collections.Generic.List`1[Laborator4_AI.Api.Models.ExamDto]]]] GetAllExams() on controller Laborator4_AI.Api.Controllers.ExamsController (Laborator4-AI).
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (10ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT r."Id", r."CourseCode", r."Date" AS "ExamDate", r."RoomNumber", (
+          SELECT count(*)::int
+          FROM "StudentRegistrations" AS s
+          WHERE s."CourseCode" = r."CourseCode" AND s."ExamDate" = r."Date") AS "RegisteredStudentsCount"
+      FROM "Reservations" AS r
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (7ms) [Parameters=[@__exam_RoomNumber_0='?'], CommandType='Text', CommandTimeout='30']
+      SELECT r."Number", r."Capacity"
+      FROM "Rooms" AS r
+      WHERE r."Number" = @__exam_RoomNumber_0
+      LIMIT 1
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ObjectResultExecutor[1]
+      Executing OkObjectResult, writing value of type 'Laborator4_AI.Api.Models.ApiResponse`1[[System.Collections.Generic.List`1[[Laborator4_AI.Api.Models.ExamDto, Laborator4-AI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker[105]
+      Executed action Laborator4_AI.Api.Controllers.ExamsController.GetAllExams (Laborator4-AI) in 21.4823ms
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[1]
+      Executed endpoint 'Laborator4_AI.Api.Controllers.ExamsController.GetAllExams (Laborator4-AI)'
+info: Microsoft.AspNetCore.Hosting.Diagnostics[2]
+      Request finished HTTP/1.1 GET http://localhost:5001/api/exams - 200 - application/json;+charset=utf-8 22.0159ms
+info: Microsoft.AspNetCore.Hosting.Diagnostics[1]
+      Request starting HTTP/1.1 GET http://localhost:5001/api/grades - - -
+info: Microsoft.AspNetCore.Cors.Infrastructure.CorsService[4]
+      CORS policy execution successful.
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[0]
+      Executing endpoint 'Laborator4_AI.Api.Controllers.GradesController.GetAllGrades (Laborator4-AI)'
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker[102]
+      Route matched with {action = "GetAllGrades", controller = "Grades"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[Laborator4_AI.Api.Models.ApiResponse`1[System.Collections.Generic.List`1[Laborator4_AI.Api.Models.GradeDto]]]] GetAllGrades() on controller Laborator4_AI.Api.Controllers.GradesController (Laborator4-AI).
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT e."Id", e."StudentRegNumber" AS "StudentRegistrationNumber", e."CourseCode", e."ExamDate", e."Grade", e."Grade" >= 5.0 AS "IsPassing", COALESCE(e."PublishedAt", now() AT TIME ZONE 'UTC') AS "PublishedAt"
+      FROM "ExamGrades" AS e
+      ORDER BY COALESCE(e."PublishedAt", now() AT TIME ZONE 'UTC') DESC
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ObjectResultExecutor[1]
+      Executing OkObjectResult, writing value of type 'Laborator4_AI.Api.Models.ApiResponse`1[[System.Collections.Generic.List`1[[Laborator4_AI.Api.Models.GradeDto, Laborator4-AI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker[105]
+      Executed action Laborator4_AI.Api.Controllers.GradesController.GetAllGrades (Laborator4-AI) in 4.6247ms
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[1]
+      Executed endpoint 'Laborator4_AI.Api.Controllers.GradesController.GetAllGrades (Laborator4-AI)'
+info: Microsoft.AspNetCore.Hosting.Diagnostics[2]
+      Request finished HTTP/1.1 GET http://localhost:5001/api/grades - 200 - application/json;+charset=utf-8 4.9882ms
+info: Microsoft.AspNetCore.Hosting.Diagnostics[1]
+      Request starting HTTP/1.1 GET http://localhost:5001/api/exams/rooms - - -
+info: Microsoft.AspNetCore.Cors.Infrastructure.CorsService[4]
+      CORS policy execution successful.
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[0]
+      Executing endpoint 'Laborator4_AI.Api.Controllers.ExamsController.GetRooms (Laborator4-AI)'
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker[102]
+      Route matched with {action = "GetRooms", controller = "Exams"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[Laborator4_AI.Api.Models.ApiResponse`1[System.Collections.Generic.List`1[System.Object]]]] GetRooms() on controller Laborator4_AI.Api.Controllers.ExamsController (Laborator4-AI).
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT r."Number", r."Capacity"
+      FROM "Rooms" AS r
+      ORDER BY r."Number"
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ObjectResultExecutor[1]
+      Executing OkObjectResult, writing value of type 'Laborator4_AI.Api.Models.ApiResponse`1[[System.Collections.Generic.List`1[[System.Object, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]], System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker[105]
+      Executed action Laborator4_AI.Api.Controllers.ExamsController.GetRooms (Laborator4-AI) in 2.4919ms
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[1]
+      Executed endpoint 'Laborator4_AI.Api.Controllers.ExamsController.GetRooms (Laborator4-AI)'
+info: Microsoft.AspNetCore.Hosting.Diagnostics[2]
+      Request finished HTTP/1.1 GET http://localhost:5001/api/exams/rooms - 200 - application/json;+charset=utf-8 3.1506ms
+info: Microsoft.AspNetCore.Hosting.Diagnostics[1]
+      Request starting HTTP/1.1 GET http://localhost:5001/api/students/registrations - - -
+info: Microsoft.AspNetCore.Cors.Infrastructure.CorsService[4]
+      CORS policy execution successful.
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[0]
+      Executing endpoint 'Laborator4_AI.Api.Controllers.StudentsController.GetAllRegistrations (Laborator4-AI)'
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker[102]
+      Route matched with {action = "GetAllRegistrations", controller = "Students"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[Laborator4_AI.Api.Models.ApiResponse`1[System.Collections.Generic.List`1[Laborator4_AI.Api.Models.StudentRegistrationDto]]]] GetAllRegistrations() on controller Laborator4_AI.Api.Controllers.StudentsController (Laborator4-AI).
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT s."Id", s."StudentRegNumber" AS "StudentRegistrationNumber", s."CourseCode", s."ExamDate", s."RoomNumber", s."RegisteredAt"
+      FROM "StudentRegistrations" AS s
+      ORDER BY s."RegisteredAt" DESC
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ObjectResultExecutor[1]
+      Executing OkObjectResult, writing value of type 'Laborator4_AI.Api.Models.ApiResponse`1[[System.Collections.Generic.List`1[[Laborator4_AI.Api.Models.StudentRegistrationDto, Laborator4-AI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker[105]
+      Executed action Laborator4_AI.Api.Controllers.StudentsController.GetAllRegistrations (Laborator4-AI) in 2.323ms
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[1]
+      Executed endpoint 'Laborator4_AI.Api.Controllers.StudentsController.GetAllRegistrations (Laborator4-AI)'
+info: Microsoft.AspNetCore.Hosting.Diagnostics[2]
+      Request finished HTTP/1.1 GET http://localhost:5001/api/students/registrations - 200 - application/json;+charset=utf-8 3.1060ms
+info: Microsoft.AspNetCore.Hosting.Diagnostics[1]
+      Request starting HTTP/1.1 GET http://localhost:5001/api/exams/rooms - - -
+info: Microsoft.AspNetCore.Cors.Infrastructure.CorsService[4]
+      CORS policy execution successful.
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[0]
+      Executing endpoint 'Laborator4_AI.Api.Controllers.ExamsController.GetRooms (Laborator4-AI)'
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker[102]
+      Route matched with {action = "GetRooms", controller = "Exams"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[Laborator4_AI.Api.Models.ApiResponse`1[System.Collections.Generic.List`1[System.Object]]]] GetRooms() on controller Laborator4_AI.Api.Controllers.ExamsController (Laborator4-AI).
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (2ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT r."Number", r."Capacity"
+      FROM "Rooms" AS r
+      ORDER BY r."Number"
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ObjectResultExecutor[1]
+      Executing OkObjectResult, writing value of type 'Laborator4_AI.Api.Models.ApiResponse`1[[System.Collections.Generic.List`1[[System.Object, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]], System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker[105]
+      Executed action Laborator4_AI.Api.Controllers.ExamsController.GetRooms (Laborator4-AI) in 4.3709ms
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[1]
+      Executed endpoint 'Laborator4_AI.Api.Controllers.ExamsController.GetRooms (Laborator4-AI)'
+info: Microsoft.AspNetCore.Hosting.Diagnostics[2]
+      Request finished HTTP/1.1 GET http://localhost:5001/api/exams/rooms - 200 - application/json;+charset=utf-8 4.7372ms
+info: Microsoft.AspNetCore.Hosting.Diagnostics[1]
+      Request starting HTTP/1.1 GET http://localhost:5001/api/grades - - -
+info: Microsoft.AspNetCore.Cors.Infrastructure.CorsService[4]
+      CORS policy execution successful.
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[0]
+      Executing endpoint 'Laborator4_AI.Api.Controllers.GradesController.GetAllGrades (Laborator4-AI)'
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker[102]
+      Route matched with {action = "GetAllGrades", controller = "Grades"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[Laborator4_AI.Api.Models.ApiResponse`1[System.Collections.Generic.List`1[Laborator4_AI.Api.Models.GradeDto]]]] GetAllGrades() on controller Laborator4_AI.Api.Controllers.GradesController (Laborator4-AI).
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (2ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT e."Id", e."StudentRegNumber" AS "StudentRegistrationNumber", e."CourseCode", e."ExamDate", e."Grade", e."Grade" >= 5.0 AS "IsPassing", COALESCE(e."PublishedAt", now() AT TIME ZONE 'UTC') AS "PublishedAt"
+      FROM "ExamGrades" AS e
+      ORDER BY COALESCE(e."PublishedAt", now() AT TIME ZONE 'UTC') DESC
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ObjectResultExecutor[1]
+      Executing OkObjectResult, writing value of type 'Laborator4_AI.Api.Models.ApiResponse`1[[System.Collections.Generic.List`1[[Laborator4_AI.Api.Models.GradeDto, Laborator4-AI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker[105]
+      Executed action Laborator4_AI.Api.Controllers.GradesController.GetAllGrades (Laborator4-AI) in 3.4291ms
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[1]
+      Executed endpoint 'Laborator4_AI.Api.Controllers.GradesController.GetAllGrades (Laborator4-AI)'
+info: Microsoft.AspNetCore.Hosting.Diagnostics[2]
+      Request finished HTTP/1.1 GET http://localhost:5001/api/grades - 200 - application/json;+charset=utf-8 3.7717ms
+info: Microsoft.AspNetCore.Hosting.Diagnostics[1]
+      Request starting HTTP/1.1 GET http://localhost:5001/api/students/registrations - - -
+info: Microsoft.AspNetCore.Cors.Infrastructure.CorsService[4]
+      CORS policy execution successful.
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[0]
+      Executing endpoint 'Laborator4_AI.Api.Controllers.StudentsController.GetAllRegistrations (Laborator4-AI)'
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker[102]
+      Route matched with {action = "GetAllRegistrations", controller = "Students"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[Laborator4_AI.Api.Models.ApiResponse`1[System.Collections.Generic.List`1[Laborator4_AI.Api.Models.StudentRegistrationDto]]]] GetAllRegistrations() on controller Laborator4_AI.Api.Controllers.StudentsController (Laborator4-AI).
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (9ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT s."Id", s."StudentRegNumber" AS "StudentRegistrationNumber", s."CourseCode", s."ExamDate", s."RoomNumber", s."RegisteredAt"
+      FROM "StudentRegistrations" AS s
+      ORDER BY s."RegisteredAt" DESC
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ObjectResultExecutor[1]
+      Executing OkObjectResult, writing value of type 'Laborator4_AI.Api.Models.ApiResponse`1[[System.Collections.Generic.List`1[[Laborator4_AI.Api.Models.StudentRegistrationDto, Laborator4-AI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker[105]
+      Executed action Laborator4_AI.Api.Controllers.StudentsController.GetAllRegistrations (Laborator4-AI) in 10.0397ms
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[1]
+      Executed endpoint 'Laborator4_AI.Api.Controllers.StudentsController.GetAllRegistrations (Laborator4-AI)'
+info: Microsoft.AspNetCore.Hosting.Diagnostics[2]
+      Request finished HTTP/1.1 GET http://localhost:5001/api/students/registrations - 200 - application/json;+charset=utf-8 10.2943ms
+info: Microsoft.AspNetCore.Hosting.Diagnostics[1]
+      Request starting HTTP/1.1 GET http://localhost:5001/api/grades - - -
+info: Microsoft.AspNetCore.Cors.Infrastructure.CorsService[4]
+      CORS policy execution successful.
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[0]
+      Executing endpoint 'Laborator4_AI.Api.Controllers.GradesController.GetAllGrades (Laborator4-AI)'
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker[102]
+      Route matched with {action = "GetAllGrades", controller = "Grades"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[Laborator4_AI.Api.Models.ApiResponse`1[System.Collections.Generic.List`1[Laborator4_AI.Api.Models.GradeDto]]]] GetAllGrades() on controller Laborator4_AI.Api.Controllers.GradesController (Laborator4-AI).
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (3ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT e."Id", e."StudentRegNumber" AS "StudentRegistrationNumber", e."CourseCode", e."ExamDate", e."Grade", e."Grade" >= 5.0 AS "IsPassing", COALESCE(e."PublishedAt", now() AT TIME ZONE 'UTC') AS "PublishedAt"
+      FROM "ExamGrades" AS e
+      ORDER BY COALESCE(e."PublishedAt", now() AT TIME ZONE 'UTC') DESC
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ObjectResultExecutor[1]
+      Executing OkObjectResult, writing value of type 'Laborator4_AI.Api.Models.ApiResponse`1[[System.Collections.Generic.List`1[[Laborator4_AI.Api.Models.GradeDto, Laborator4-AI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker[105]
+      Executed action Laborator4_AI.Api.Controllers.GradesController.GetAllGrades (Laborator4-AI) in 3.9802ms
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[1]
+      Executed endpoint 'Laborator4_AI.Api.Controllers.GradesController.GetAllGrades (Laborator4-AI)'
+info: Microsoft.AspNetCore.Hosting.Diagnostics[2]
+      Request finished HTTP/1.1 GET http://localhost:5001/api/grades - 200 - application/json;+charset=utf-8 4.2025ms
+info: Microsoft.AspNetCore.Hosting.Diagnostics[1]
+      Request starting HTTP/1.1 GET http://localhost:5001/api/students/registrations - - -
+info: Microsoft.AspNetCore.Cors.Infrastructure.CorsService[4]
+      CORS policy execution successful.
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[0]
+      Executing endpoint 'Laborator4_AI.Api.Controllers.StudentsController.GetAllRegistrations (Laborator4-AI)'
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker[102]
+      Route matched with {action = "GetAllRegistrations", controller = "Students"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[Laborator4_AI.Api.Models.ApiResponse`1[System.Collections.Generic.List`1[Laborator4_AI.Api.Models.StudentRegistrationDto]]]] GetAllRegistrations() on controller Laborator4_AI.Api.Controllers.StudentsController (Laborator4-AI).
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (2ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT s."Id", s."StudentRegNumber" AS "StudentRegistrationNumber", s."CourseCode", s."ExamDate", s."RoomNumber", s."RegisteredAt"
+      FROM "StudentRegistrations" AS s
+      ORDER BY s."RegisteredAt" DESC
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ObjectResultExecutor[1]
+      Executing OkObjectResult, writing value of type 'Laborator4_AI.Api.Models.ApiResponse`1[[System.Collections.Generic.List`1[[Laborator4_AI.Api.Models.StudentRegistrationDto, Laborator4-AI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker[105]
+      Executed action Laborator4_AI.Api.Controllers.StudentsController.GetAllRegistrations (Laborator4-AI) in 3.2986ms
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[1]
+      Executed endpoint 'Laborator4_AI.Api.Controllers.StudentsController.GetAllRegistrations (Laborator4-AI)'
+info: Microsoft.AspNetCore.Hosting.Diagnostics[2]
+      Request finished HTTP/1.1 GET http://localhost:5001/api/students/registrations - 200 - application/json;+charset=utf-8 3.7581ms
+info: Microsoft.AspNetCore.Hosting.Diagnostics[1]
+      Request starting HTTP/1.1 GET http://localhost:5001/api/exams - - -
+info: Microsoft.AspNetCore.Cors.Infrastructure.CorsService[4]
+      CORS policy execution successful.
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[0]
+      Executing endpoint 'Laborator4_AI.Api.Controllers.ExamsController.GetAllExams (Laborator4-AI)'
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker[102]
+      Route matched with {action = "GetAllExams", controller = "Exams"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[Laborator4_AI.Api.Models.ApiResponse`1[System.Collections.Generic.List`1[Laborator4_AI.Api.Models.ExamDto]]]] GetAllExams() on controller Laborator4_AI.Api.Controllers.ExamsController (Laborator4-AI).
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT r."Id", r."CourseCode", r."Date" AS "ExamDate", r."RoomNumber", (
+          SELECT count(*)::int
+          FROM "StudentRegistrations" AS s
+          WHERE s."CourseCode" = r."CourseCode" AND s."ExamDate" = r."Date") AS "RegisteredStudentsCount"
+      FROM "Reservations" AS r
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@__exam_RoomNumber_0='?'], CommandType='Text', CommandTimeout='30']
+      SELECT r."Number", r."Capacity"
+      FROM "Rooms" AS r
+      WHERE r."Number" = @__exam_RoomNumber_0
+      LIMIT 1
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ObjectResultExecutor[1]
+      Executing OkObjectResult, writing value of type 'Laborator4_AI.Api.Models.ApiResponse`1[[System.Collections.Generic.List`1[[Laborator4_AI.Api.Models.ExamDto, Laborator4-AI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker[105]
+      Executed action Laborator4_AI.Api.Controllers.ExamsController.GetAllExams (Laborator4-AI) in 2.2407ms
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[1]
+      Executed endpoint 'Laborator4_AI.Api.Controllers.ExamsController.GetAllExams (Laborator4-AI)'
+info: Microsoft.AspNetCore.Hosting.Diagnostics[2]
+      Request finished HTTP/1.1 GET http://localhost:5001/api/exams - 200 - application/json;+charset=utf-8 2.5595ms
+info: Microsoft.AspNetCore.Hosting.Diagnostics[1]
+      Request starting HTTP/1.1 GET http://localhost:5001/api/students/registrations - - -
+info: Microsoft.AspNetCore.Cors.Infrastructure.CorsService[4]
+      CORS policy execution successful.
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[0]
+      Executing endpoint 'Laborator4_AI.Api.Controllers.StudentsController.GetAllRegistrations (Laborator4-AI)'
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker[102]
+      Route matched with {action = "GetAllRegistrations", controller = "Students"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[Laborator4_AI.Api.Models.ApiResponse`1[System.Collections.Generic.List`1[Laborator4_AI.Api.Models.StudentRegistrationDto]]]] GetAllRegistrations() on controller Laborator4_AI.Api.Controllers.StudentsController (Laborator4-AI).
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (5ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT s."Id", s."StudentRegNumber" AS "StudentRegistrationNumber", s."CourseCode", s."ExamDate", s."RoomNumber", s."RegisteredAt"
+      FROM "StudentRegistrations" AS s
+      ORDER BY s."RegisteredAt" DESC
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ObjectResultExecutor[1]
+      Executing OkObjectResult, writing value of type 'Laborator4_AI.Api.Models.ApiResponse`1[[System.Collections.Generic.List`1[[Laborator4_AI.Api.Models.StudentRegistrationDto, Laborator4-AI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker[105]
+      Executed action Laborator4_AI.Api.Controllers.StudentsController.GetAllRegistrations (Laborator4-AI) in 6.169ms
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[1]
+      Executed endpoint 'Laborator4_AI.Api.Controllers.StudentsController.GetAllRegistrations (Laborator4-AI)'
+info: Microsoft.AspNetCore.Hosting.Diagnostics[2]
+      Request finished HTTP/1.1 GET http://localhost:5001/api/students/registrations - 200 - application/json;+charset=utf-8 6.4973ms
+info: Microsoft.AspNetCore.Hosting.Diagnostics[1]
+      Request starting HTTP/1.1 GET http://localhost:5001/api/grades - - -
+info: Microsoft.AspNetCore.Cors.Infrastructure.CorsService[4]
+      CORS policy execution successful.
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[0]
+      Executing endpoint 'Laborator4_AI.Api.Controllers.GradesController.GetAllGrades (Laborator4-AI)'
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker[102]
+      Route matched with {action = "GetAllGrades", controller = "Grades"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[Laborator4_AI.Api.Models.ApiResponse`1[System.Collections.Generic.List`1[Laborator4_AI.Api.Models.GradeDto]]]] GetAllGrades() on controller Laborator4_AI.Api.Controllers.GradesController (Laborator4-AI).
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (4ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT e."Id", e."StudentRegNumber" AS "StudentRegistrationNumber", e."CourseCode", e."ExamDate", e."Grade", e."Grade" >= 5.0 AS "IsPassing", COALESCE(e."PublishedAt", now() AT TIME ZONE 'UTC') AS "PublishedAt"
+      FROM "ExamGrades" AS e
+      ORDER BY COALESCE(e."PublishedAt", now() AT TIME ZONE 'UTC') DESC
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ObjectResultExecutor[1]
+      Executing OkObjectResult, writing value of type 'Laborator4_AI.Api.Models.ApiResponse`1[[System.Collections.Generic.List`1[[Laborator4_AI.Api.Models.GradeDto, Laborator4-AI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker[105]
+      Executed action Laborator4_AI.Api.Controllers.GradesController.GetAllGrades (Laborator4-AI) in 5.2334ms
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[1]
+      Executed endpoint 'Laborator4_AI.Api.Controllers.GradesController.GetAllGrades (Laborator4-AI)'
+info: Microsoft.AspNetCore.Hosting.Diagnostics[2]
+      Request finished HTTP/1.1 GET http://localhost:5001/api/grades - 200 - application/json;+charset=utf-8 5.5161ms
+info: Microsoft.AspNetCore.Hosting.Diagnostics[1]
+      Request starting HTTP/1.1 GET http://localhost:5001/api/students/registrations - - -
+info: Microsoft.AspNetCore.Cors.Infrastructure.CorsService[4]
+      CORS policy execution successful.
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[0]
+      Executing endpoint 'Laborator4_AI.Api.Controllers.StudentsController.GetAllRegistrations (Laborator4-AI)'
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker[102]
+      Route matched with {action = "GetAllRegistrations", controller = "Students"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[Laborator4_AI.Api.Models.ApiResponse`1[System.Collections.Generic.List`1[Laborator4_AI.Api.Models.StudentRegistrationDto]]]] GetAllRegistrations() on controller Laborator4_AI.Api.Controllers.StudentsController (Laborator4-AI).
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (10ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT s."Id", s."StudentRegNumber" AS "StudentRegistrationNumber", s."CourseCode", s."ExamDate", s."RoomNumber", s."RegisteredAt"
+      FROM "StudentRegistrations" AS s
+      ORDER BY s."RegisteredAt" DESC
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ObjectResultExecutor[1]
+      Executing OkObjectResult, writing value of type 'Laborator4_AI.Api.Models.ApiResponse`1[[System.Collections.Generic.List`1[[Laborator4_AI.Api.Models.StudentRegistrationDto, Laborator4-AI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker[105]
+      Executed action Laborator4_AI.Api.Controllers.StudentsController.GetAllRegistrations (Laborator4-AI) in 10.6922ms
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[1]
+      Executed endpoint 'Laborator4_AI.Api.Controllers.StudentsController.GetAllRegistrations (Laborator4-AI)'
+info: Microsoft.AspNetCore.Hosting.Diagnostics[2]
+      Request finished HTTP/1.1 GET http://localhost:5001/api/students/registrations - 200 - application/json;+charset=utf-8 11.0467ms
+info: Microsoft.AspNetCore.Hosting.Diagnostics[1]
+      Request starting HTTP/1.1 GET http://localhost:5001/api/grades - - -
+info: Microsoft.AspNetCore.Cors.Infrastructure.CorsService[4]
+      CORS policy execution successful.
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[0]
+      Executing endpoint 'Laborator4_AI.Api.Controllers.GradesController.GetAllGrades (Laborator4-AI)'
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker[102]
+      Route matched with {action = "GetAllGrades", controller = "Grades"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[Laborator4_AI.Api.Models.ApiResponse`1[System.Collections.Generic.List`1[Laborator4_AI.Api.Models.GradeDto]]]] GetAllGrades() on controller Laborator4_AI.Api.Controllers.GradesController (Laborator4-AI).
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (2ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT e."Id", e."StudentRegNumber" AS "StudentRegistrationNumber", e."CourseCode", e."ExamDate", e."Grade", e."Grade" >= 5.0 AS "IsPassing", COALESCE(e."PublishedAt", now() AT TIME ZONE 'UTC') AS "PublishedAt"
+      FROM "ExamGrades" AS e
+      ORDER BY COALESCE(e."PublishedAt", now() AT TIME ZONE 'UTC') DESC
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ObjectResultExecutor[1]
+      Executing OkObjectResult, writing value of type 'Laborator4_AI.Api.Models.ApiResponse`1[[System.Collections.Generic.List`1[[Laborator4_AI.Api.Models.GradeDto, Laborator4-AI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker[105]
+      Executed action Laborator4_AI.Api.Controllers.GradesController.GetAllGrades (Laborator4-AI) in 2.7329ms
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[1]
+      Executed endpoint 'Laborator4_AI.Api.Controllers.GradesController.GetAllGrades (Laborator4-AI)'
+info: Microsoft.AspNetCore.Hosting.Diagnostics[2]
+      Request finished HTTP/1.1 GET http://localhost:5001/api/grades - 200 - application/json;+charset=utf-8 3.0297ms
+info: Microsoft.AspNetCore.Hosting.Diagnostics[1]
+      Request starting HTTP/1.1 GET http://localhost:5001/api/students/registrations - - -
+info: Microsoft.AspNetCore.Cors.Infrastructure.CorsService[4]
+      CORS policy execution successful.
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[0]
+      Executing endpoint 'Laborator4_AI.Api.Controllers.StudentsController.GetAllRegistrations (Laborator4-AI)'
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker[102]
+      Route matched with {action = "GetAllRegistrations", controller = "Students"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[Laborator4_AI.Api.Models.ApiResponse`1[System.Collections.Generic.List`1[Laborator4_AI.Api.Models.StudentRegistrationDto]]]] GetAllRegistrations() on controller Laborator4_AI.Api.Controllers.StudentsController (Laborator4-AI).
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT s."Id", s."StudentRegNumber" AS "StudentRegistrationNumber", s."CourseCode", s."ExamDate", s."RoomNumber", s."RegisteredAt"
+      FROM "StudentRegistrations" AS s
+      ORDER BY s."RegisteredAt" DESC
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ObjectResultExecutor[1]
+      Executing OkObjectResult, writing value of type 'Laborator4_AI.Api.Models.ApiResponse`1[[System.Collections.Generic.List`1[[Laborator4_AI.Api.Models.StudentRegistrationDto, Laborator4-AI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker[105]
+      Executed action Laborator4_AI.Api.Controllers.StudentsController.GetAllRegistrations (Laborator4-AI) in 1.7403ms
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[1]
+      Executed endpoint 'Laborator4_AI.Api.Controllers.StudentsController.GetAllRegistrations (Laborator4-AI)'
+info: Microsoft.AspNetCore.Hosting.Diagnostics[2]
+      Request finished HTTP/1.1 GET http://localhost:5001/api/students/registrations - 200 - application/json;+charset=utf-8 2.1695ms
+info: Microsoft.AspNetCore.Hosting.Diagnostics[1]
+      Request starting HTTP/1.1 GET http://localhost:5001/api/grades - - -
+info: Microsoft.AspNetCore.Cors.Infrastructure.CorsService[4]
+      CORS policy execution successful.
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[0]
+      Executing endpoint 'Laborator4_AI.Api.Controllers.GradesController.GetAllGrades (Laborator4-AI)'
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker[102]
+      Route matched with {action = "GetAllGrades", controller = "Grades"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[Laborator4_AI.Api.Models.ApiResponse`1[System.Collections.Generic.List`1[Laborator4_AI.Api.Models.GradeDto]]]] GetAllGrades() on controller Laborator4_AI.Api.Controllers.GradesController (Laborator4-AI).
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (6ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT e."Id", e."StudentRegNumber" AS "StudentRegistrationNumber", e."CourseCode", e."ExamDate", e."Grade", e."Grade" >= 5.0 AS "IsPassing", COALESCE(e."PublishedAt", now() AT TIME ZONE 'UTC') AS "PublishedAt"
+      FROM "ExamGrades" AS e
+      ORDER BY COALESCE(e."PublishedAt", now() AT TIME ZONE 'UTC') DESC
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ObjectResultExecutor[1]
+      Executing OkObjectResult, writing value of type 'Laborator4_AI.Api.Models.ApiResponse`1[[System.Collections.Generic.List`1[[Laborator4_AI.Api.Models.GradeDto, Laborator4-AI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker[105]
+      Executed action Laborator4_AI.Api.Controllers.GradesController.GetAllGrades (Laborator4-AI) in 6.7108ms
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[1]
+      Executed endpoint 'Laborator4_AI.Api.Controllers.GradesController.GetAllGrades (Laborator4-AI)'
+info: Microsoft.AspNetCore.Hosting.Diagnostics[2]
+      Request finished HTTP/1.1 GET http://localhost:5001/api/grades - 200 - application/json;+charset=utf-8 7.0795ms
+info: Microsoft.AspNetCore.Hosting.Diagnostics[1]
+      Request starting HTTP/1.1 GET http://localhost:5001/api/students/registrations - - -
+info: Microsoft.AspNetCore.Cors.Infrastructure.CorsService[4]
+      CORS policy execution successful.
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[0]
+      Executing endpoint 'Laborator4_AI.Api.Controllers.StudentsController.GetAllRegistrations (Laborator4-AI)'
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker[102]
+      Route matched with {action = "GetAllRegistrations", controller = "Students"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[Laborator4_AI.Api.Models.ApiResponse`1[System.Collections.Generic.List`1[Laborator4_AI.Api.Models.StudentRegistrationDto]]]] GetAllRegistrations() on controller Laborator4_AI.Api.Controllers.StudentsController (Laborator4-AI).
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (10ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT s."Id", s."StudentRegNumber" AS "StudentRegistrationNumber", s."CourseCode", s."ExamDate", s."RoomNumber", s."RegisteredAt"
+      FROM "StudentRegistrations" AS s
+      ORDER BY s."RegisteredAt" DESC
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ObjectResultExecutor[1]
+      Executing OkObjectResult, writing value of type 'Laborator4_AI.Api.Models.ApiResponse`1[[System.Collections.Generic.List`1[[Laborator4_AI.Api.Models.StudentRegistrationDto, Laborator4-AI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker[105]
+      Executed action Laborator4_AI.Api.Controllers.StudentsController.GetAllRegistrations (Laborator4-AI) in 34.4083ms
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[1]
+      Executed endpoint 'Laborator4_AI.Api.Controllers.StudentsController.GetAllRegistrations (Laborator4-AI)'
+info: Microsoft.AspNetCore.Hosting.Diagnostics[2]
+      Request finished HTTP/1.1 GET http://localhost:5001/api/students/registrations - 200 - application/json;+charset=utf-8 40.4810ms
+info: Microsoft.AspNetCore.Hosting.Diagnostics[1]
+      Request starting HTTP/1.1 GET http://localhost:5001/api/exams - - -
+info: Microsoft.AspNetCore.Cors.Infrastructure.CorsService[4]
+      CORS policy execution successful.
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[0]
+      Executing endpoint 'Laborator4_AI.Api.Controllers.ExamsController.GetAllExams (Laborator4-AI)'
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker[102]
+      Route matched with {action = "GetAllExams", controller = "Exams"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[Laborator4_AI.Api.Models.ApiResponse`1[System.Collections.Generic.List`1[Laborator4_AI.Api.Models.ExamDto]]]] GetAllExams() on controller Laborator4_AI.Api.Controllers.ExamsController (Laborator4-AI).
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (15ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT r."Id", r."CourseCode", r."Date" AS "ExamDate", r."RoomNumber", (
+          SELECT count(*)::int
+          FROM "StudentRegistrations" AS s
+          WHERE s."CourseCode" = r."CourseCode" AND s."ExamDate" = r."Date") AS "RegisteredStudentsCount"
+      FROM "Reservations" AS r
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (2ms) [Parameters=[@__exam_RoomNumber_0='?'], CommandType='Text', CommandTimeout='30']
+      SELECT r."Number", r."Capacity"
+      FROM "Rooms" AS r
+      WHERE r."Number" = @__exam_RoomNumber_0
+      LIMIT 1
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ObjectResultExecutor[1]
+      Executing OkObjectResult, writing value of type 'Laborator4_AI.Api.Models.ApiResponse`1[[System.Collections.Generic.List`1[[Laborator4_AI.Api.Models.ExamDto, Laborator4-AI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker[105]
+      Executed action Laborator4_AI.Api.Controllers.ExamsController.GetAllExams (Laborator4-AI) in 25.1931ms
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[1]
+      Executed endpoint 'Laborator4_AI.Api.Controllers.ExamsController.GetAllExams (Laborator4-AI)'
+info: Microsoft.AspNetCore.Hosting.Diagnostics[2]
+      Request finished HTTP/1.1 GET http://localhost:5001/api/exams - 200 - application/json;+charset=utf-8 28.6480ms
+info: Microsoft.AspNetCore.Hosting.Diagnostics[1]
+      Request starting HTTP/1.1 GET http://localhost:5001/api/exams/rooms - - -
+info: Microsoft.AspNetCore.Cors.Infrastructure.CorsService[4]
+      CORS policy execution successful.
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[0]
+      Executing endpoint 'Laborator4_AI.Api.Controllers.ExamsController.GetRooms (Laborator4-AI)'
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker[102]
+      Route matched with {action = "GetRooms", controller = "Exams"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[Laborator4_AI.Api.Models.ApiResponse`1[System.Collections.Generic.List`1[System.Object]]]] GetRooms() on controller Laborator4_AI.Api.Controllers.ExamsController (Laborator4-AI).
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (6ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT r."Number", r."Capacity"
+      FROM "Rooms" AS r
+      ORDER BY r."Number"
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ObjectResultExecutor[1]
+      Executing OkObjectResult, writing value of type 'Laborator4_AI.Api.Models.ApiResponse`1[[System.Collections.Generic.List`1[[System.Object, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]], System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker[105]
+      Executed action Laborator4_AI.Api.Controllers.ExamsController.GetRooms (Laborator4-AI) in 9.6769ms
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[1]
+      Executed endpoint 'Laborator4_AI.Api.Controllers.ExamsController.GetRooms (Laborator4-AI)'
+info: Microsoft.AspNetCore.Hosting.Diagnostics[2]
+      Request finished HTTP/1.1 GET http://localhost:5001/api/exams/rooms - 200 - application/json;+charset=utf-8 10.2090ms
+info: Microsoft.AspNetCore.Hosting.Diagnostics[1]
+      Request starting HTTP/1.1 GET http://localhost:5001/api/exams - - -
+info: Microsoft.AspNetCore.Cors.Infrastructure.CorsService[4]
+      CORS policy execution successful.
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[0]
+      Executing endpoint 'Laborator4_AI.Api.Controllers.ExamsController.GetAllExams (Laborator4-AI)'
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker[102]
+      Route matched with {action = "GetAllExams", controller = "Exams"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[Laborator4_AI.Api.Models.ApiResponse`1[System.Collections.Generic.List`1[Laborator4_AI.Api.Models.ExamDto]]]] GetAllExams() on controller Laborator4_AI.Api.Controllers.ExamsController (Laborator4-AI).
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT r."Id", r."CourseCode", r."Date" AS "ExamDate", r."RoomNumber", (
+          SELECT count(*)::int
+          FROM "StudentRegistrations" AS s
+          WHERE s."CourseCode" = r."CourseCode" AND s."ExamDate" = r."Date") AS "RegisteredStudentsCount"
+      FROM "Reservations" AS r
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@__exam_RoomNumber_0='?'], CommandType='Text', CommandTimeout='30']
+      SELECT r."Number", r."Capacity"
+      FROM "Rooms" AS r
+      WHERE r."Number" = @__exam_RoomNumber_0
+      LIMIT 1
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ObjectResultExecutor[1]
+      Executing OkObjectResult, writing value of type 'Laborator4_AI.Api.Models.ApiResponse`1[[System.Collections.Generic.List`1[[Laborator4_AI.Api.Models.ExamDto, Laborator4-AI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker[105]
+      Executed action Laborator4_AI.Api.Controllers.ExamsController.GetAllExams (Laborator4-AI) in 3.1369ms
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[1]
+      Executed endpoint 'Laborator4_AI.Api.Controllers.ExamsController.GetAllExams (Laborator4-AI)'
+info: Microsoft.AspNetCore.Hosting.Diagnostics[2]
+      Request finished HTTP/1.1 GET http://localhost:5001/api/exams - 200 - application/json;+charset=utf-8 3.5767ms

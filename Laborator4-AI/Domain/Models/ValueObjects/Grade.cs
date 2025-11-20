@@ -1,6 +1,7 @@
 namespace Laborator4_AI.Domain.Models.ValueObjects
 {
     using System;
+    using System.Globalization;
 
     /// <summary>
     /// Value object for Grade representing a student's exam grade
@@ -27,7 +28,8 @@ namespace Laborator4_AI.Domain.Models.ValueObjects
                 return false;
             }
             
-            if (!decimal.TryParse(input.Trim(), out var v))
+            // Use InvariantCulture to parse "8.50" consistently regardless of system culture
+            if (!decimal.TryParse(input.Trim(), NumberStyles.Number, CultureInfo.InvariantCulture, out var v))
             {
                 error = "Grade must be a valid number";
                 return false;

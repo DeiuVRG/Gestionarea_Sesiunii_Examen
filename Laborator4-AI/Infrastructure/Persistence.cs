@@ -19,8 +19,14 @@ namespace Laborator4_AI.Infrastructure
         public DbSet<ExamGradeEntity> ExamGrades { get; set; } = null!;
         public DbSet<ContestationEntity> Contestations { get; set; } = null!;
 
-        private readonly string _connectionString;
+        private readonly string? _connectionString;
 
+        // Constructor for DI (ASP.NET Core Web API)
+        public SchedulingDbContext(DbContextOptions<SchedulingDbContext> options) : base(options)
+        {
+        }
+
+        // Constructor for direct instantiation (Console app)
         public SchedulingDbContext(string connectionString)
         {
             _connectionString = connectionString;
@@ -28,7 +34,10 @@ namespace Laborator4_AI.Infrastructure
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseNpgsql(_connectionString);
+            if (!optionsBuilder.IsConfigured && !string.IsNullOrEmpty(_connectionString))
+            {
+                optionsBuilder.UseNpgsql(_connectionString);
+            }
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

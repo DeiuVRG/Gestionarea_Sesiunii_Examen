@@ -1,27 +1,44 @@
-# Sistem de Gestionare a Sesiunii de Examene# Gestionarea_Sesiunii_Examen
+# 🎓 Sistem de Gestionare a Sesiunii de Examene
 
+## 🚀 Quick Start - Web API
+
+```bash
+cd Laborator4-AI
+dotnet run --urls="http://localhost:5001"
+```
+
+**Swagger UI:** http://localhost:5001
+
+---
 
 ## 📋 Descriere
 
-Sistem DDD (Domain-Driven Design) pentru gestionarea sesiunii de examene la nivel de facultate, implementat în C# .NET 8 cu pattern-uri clean architecture.
+Sistem **DDD (Domain-Driven Design)** pentru gestionarea sesiunii de examene, implementat în **.NET 9.0** cu:
+- ✅ **ASP.NET Core Web API** - REST API cu Swagger
+- ✅ **PostgreSQL** - Bază de date persistentă
+- ✅ **Entity Framework Core** - ORM
+- ✅ **10 Endpoint-uri funcționale** - CRUD complet
 
-## 🎯 Cerințe Funcționale
+---
 
-### Actori Principali
+## 🎯 Funcționalități Principale
+
+### 📡 Web API (Swagger UI)
+1. **Vizualizare examene** - GET /api/exams
+2. **Vizualizare săli** - GET /api/exams/rooms
+3. **Înregistrare studenți** - POST /api/students/register
+4. **Publicare note** - POST /api/grades
+5. **Statistici și rapoarte** - Pass rates, grade distribution
+
+### 🎭 Actori
 - **Secretariat**: Planifică examene, alocă săli
-- **Profesori**: Propun date, corectează, publică note
+- **Profesori**: Publică note, gestionează examinări
 - **Studenți**: Se înscriu, vizualizează rezultate, contestă
-- **Administrator sistem**: Gestionează capacități, conflicte
+- **Administrator**: Gestionează capacități, conflicte
 
-### Scenarii Cheie
-1. Profesorul propune 3 date posibile pentru examen
-2. Secretariatul validează disponibilitatea sălilor și alocă
-3. Studenții se înscriu la examene (max 2 examene/zi)
-4. Profesorul introduce notele și le publică
-5. Studentul contestă nota în termen de 48h
-6. Sistemul generează rapoarte pentru promovabilitate
+---
 
-## 🏗️ Arhitectură DDD
+## 🏗️ Arhitectură DDD + Web API
 
 ```
 Laborator4-AI/
